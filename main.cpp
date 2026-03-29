@@ -242,10 +242,16 @@ int main(void)
 
             int index;
             int* choice_ptr=location_menu.getChoice();
-            if (choice_ptr==nullptr)
+            cout<<*choice_ptr<<"\n";
+            if (choice_ptr!=nullptr)
             {
                 index=*choice_ptr;
             }
+            cout<<"index "<<index<<"\n";
+            cout<<"size "<<structure_list.size()<<"\n";
+            //cout<<"first element "<<structure_list.at(index)->getName()<<"\n";
+            cout<<"zeroth element "<<structure_list[0]->getName()<<"\n";
+            //cout<<"zeroth element "<<structure_list[1]->getName()<<"\n";
             Major* major_ptr=structure_list.at(index-1); 
             if (major_ptr==nullptr) //if there is no structure with that name
             {
