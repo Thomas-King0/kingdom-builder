@@ -261,32 +261,29 @@ int Major::getPopluation(Career trade)
 //trainTownsfolk
 void Major::trainTownsfolk()
 {
-  std::cout<<"This "<<getTypeString()<<" has "<<getPopulation(TOWNSFOLK)<<" townsfolk\n"
-    <<"how many would you like to train: ";
-  int num_to_train;
-  std::cin>>num_to_train;
-  if (num_to_train<0)
+  Menu trade_menu=Menu("Choose a trade to train them in");
+  trade_menu.addOption({"farmer", "lumberjack", "miner", "shepherd", "stone mason"});
+  trade_menu.display();
+
+  int input=*trade_menu.getChoice();
+
+  if ((input>0)&&(input<=5))
   {
-    std::cout<<"Number must be positive\n";
-  }
-  else if (num_to_train>getPopulation(TOWNSFOLK))
-  {
-    std::cout<<"This "<<getTypeString()<<" does not have that many townsfolk\n";
-  }
-  else
-  {
-    std::cout<<"beginning to make menu\n";
-    Menu trade_menu=Menu("Choose a trade to train them in");
-    trade_menu.addOption({"farmer", "lumberjack", "miner", "shepherd", "stone mason"});
-    trade_menu.display();
-/*
-    std::cout<<"What trade are they being trained in:\n\t1. farmer\n\t2. lumberjack\n\t3. miner\n\t"
-      <<"4. shepherd\n\t5. stone mason\n";
-    int input;
-    std::cin>>input;
-*/
-    int input=*trade_menu.getChoice();
-    if ((input>0)&&(input<=5))
+    std::cout<<"This "<<getTypeString()<<" has "<<getPopulation(TOWNSFOLK)<<" townsfolk\n"
+      <<"how many would you like to train: ";
+    int* num_ptr=getInt();
+    if (num_ptr==nullptr)
+    {
+      std::cout<<"that is not a valid input\n";
+      return;
+    }
+
+    int num_to_train=*num_ptr;
+    if (num_to_train>getPopulation(TOWNSFOLK))
+    {
+      std::cout<<"This "<<getTypeString()<<" does not have that many townsfolk\n";
+    }
+    else if (num_to_train>0)
     {
       Career profession=static_cast<Career>(input-1);
       setPopulation(profession, getPopulation(profession)+num_to_train);
@@ -294,8 +291,12 @@ void Major::trainTownsfolk()
     }
     else
     {
-      std::cout<<"Testing: Please input a valid trade\n";
+    std::cout<<"Number must be positive\n";
     }
+  }
+  else
+  {
+      std::cout<<"Please input a valid trade\n";
   }
 }
 

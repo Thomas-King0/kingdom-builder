@@ -73,42 +73,42 @@ int Fort::getMaterials(int resource)
 //trainTownsfolk
 void Fort::trainTownsfolk()
 {
-  std::cout<<"This "<<getTypeString()<<" has "<<getPopulation(TOWNSFOLK)<<" townsfolk\n"
-    <<"how many would you like to train: ";
-  int num_to_train;
-  std::cin>>num_to_train;
-  if (num_to_train<0)
+  Menu train_menu=Menu("Choose trade to train townsfolk in");
+  train_menu.addOption({"farmer", "lumberjack", "miner", "shepherd", "stone mason", "soldier"});
+  train_menu.display();
+
+  int input=*train_menu.getChoice();
+  if ((input>0)&&(input<=6)) //input needs to be between 0 and 6 because there are 6 trades
   {
-    std::cout<<"Number must be positive\n";
-  }
-  else if (num_to_train>getPopulation(TOWNSFOLK))
-  {
-    std::cout<<"This "<<getTypeString()<<" does not have that many townsfolk\n";
-  }
-  else
-  {
-/*    std::cout<<"What trade are they being trained in:\n\t1. farmer\n\t2. lumberjack\n\t3. miner\n\t"
-      <<"4. shepherd\n\t5. stone mason\n\t6. soldier\n";
-*/
-    Menu train_menu=Menu("Choose trade to train townsfolk in");
-    train_menu.addOption({"farmer", "lumberjack", "miner", "shepherd", "stone mason", "soldier"});
-    train_menu.display();
-/*
-    std::cout<<"What trade are they being trained in:\n\t1. farmer\n\t2. lumberjack\n\t3. miner\n\t"
-      <<"4. shepherd\n\t5. stone mason\n\t6. soldier\n"; //get the trade they are being trained in
-*/
-    int input=*train_menu.getChoice();
-    std::cin>>input;
-    if ((input>0)&&(input<=6))
+    std::cout<<"This "<<getTypeString()<<" has "<<getPopulation(TOWNSFOLK)<<" townsfolk\n"
+      <<"how many would you like to train: "; //get the player input
+
+    int* num_ptr=getInt();
+    if (num_ptr==nullptr) //make sure the player entered a valid input
     {
-      Career profession=static_cast<Career>(input-1);
-      setPopulation(profession, getPopulation(profession)+num_to_train);
-      setPopulation(TOWNSFOLK, getPopulation(TOWNSFOLK)-num_to_train);
+      std::cout<<"that is not a valid input\n";
+      return;
+    }
+
+    int num_to_train=*num_ptr;
+    if (num_to_train<0) //make sure the player entered a positive number
+    {
+      std::cout<<"Number must be positive\n";
+    }
+    else if (num_to_train>getPopulation(TOWNSFOLK)) //make sure that the castle has that many townsfolk
+    {
+      std::cout<<"This "<<getTypeString()<<" does not have that many townsfolk\n";
     }
     else
     {
-      std::cout<<"Please input a valid trade\n";
+      Career profession=static_cast<Career>(input-1); //cast the input integer to a Career enumerated type
+      setPopulation(profession, getPopulation(profession)+num_to_train); //increase the population of tradesmen
+      setPopulation(TOWNSFOLK, getPopulation(TOWNSFOLK)-num_to_train); //decrease the population of townsfolk
     }
+  }
+  else
+  {
+    std::cout<<"Please input a valid trade\n";
   }
 }
 
