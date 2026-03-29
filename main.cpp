@@ -503,13 +503,14 @@ int main(void)
             {
               break;
             }
+            cout<<"got choices\n";
 
             Major* start_of_road=nullptr;
             Major* end_of_road=nullptr;
             if (location1!=location2) //make sure that the endpoints are different
             {
-              start_of_road=structure_list.at(location1); //getStructure(location1, &structure_list); //get the pointer to the start
-              end_of_road=structure_list.at(location2); //getStructure(location2, &structure_list); //get the pointer to the end
+              start_of_road=structure_list.at(location1-1); //getStructure(location1, &structure_list); //get the pointer to the start
+              end_of_road=structure_list.at(location2-1); //getStructure(location2, &structure_list); //get the pointer to the end
             }
             else
             {
@@ -525,6 +526,7 @@ int main(void)
               cout<<"built a road between "<<start_of_road->getName()<<" and "
                 <<end_of_road->getName()<<"\n";
             }
+            cout<<"end of build road\n";
             break;
           }
           default:
@@ -669,6 +671,11 @@ int main(void)
 
         if (major_ptr==nullptr) //check for a valid name
         {
+          break;
+        }
+        else if (major_ptr->isOccupied())
+        {
+          cout<<"an occupied structure cannot claim land\n";
           break;
         }
 
