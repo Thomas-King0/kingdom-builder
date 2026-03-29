@@ -79,7 +79,7 @@ int main(void)
 
   //menus
   vector<string> action_options={"produce", "build", "train townsfolk", "display data", "display map", "explore", "claim land", "list structure",
-    "transport cargo", "wait", "attack", "rename a structure", "quit"};
+    "transport cargo", "wait", "attack", "rename a structure", "quit", "start barbarian attack"};
   Menu action_menu=Menu("Choose an action", action_options);
   action_menu.setColor(105);
 
@@ -330,6 +330,7 @@ int main(void)
               index=*choice_ptr;
             }
             Major* major_ptr=structure_list.at(index-1); 
+
             if (major_ptr==nullptr) //if there is no structure with that name
             {
               break;
@@ -867,7 +868,6 @@ int main(void)
         cont=false;
         break;
       }
-      /*
       case (14): //this is only for testing
       {
         cout<<"Debug: set start_attack=true;\n";
@@ -941,7 +941,7 @@ int main(void)
       //cout<<"Checking for barbarian spawn\n";
       int random_number=rand()%100; //generate random number
       //cout<<"random number is "<<random_number<<"\n";
-      if  (random_number<5) //||(start_attack))//check if the barbarians spawn
+      if  ((random_number<5)||(start_attack))//check if the barbarians spawn
       {
         Major* major_ptr=furthestStructure(&structure_list); //get the furthest structure
         cout<<"A barbarian tribe is attacking "<<major_ptr->getName()<<"\n"; //tell the player about the attack

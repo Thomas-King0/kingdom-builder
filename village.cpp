@@ -16,7 +16,7 @@ Village::Village(): Major()
   Major::setLimit(VILLAGE_LIMIT); //adjust the limit
   setVacancy(VILLAGE_CAPACITY); //set the vacancy of the village, it starts out empty
   Major::setType(VILLAGE); //set the type of the structure
-  for (int resource=WOOD; resource<=PRODUCE; resource+=1)
+  for (int resource=PRODUCE; resource<VACUUM; resource+=1)
   {
     materials.push_back(0); //initialize the list of materials, the village starts out with none
   }

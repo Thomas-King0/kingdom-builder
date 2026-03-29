@@ -457,6 +457,7 @@ void buildMajor(Major_Structure kind, Land* tile_ptr, std::vector<Major*>* struc
 //canBuildMinor
 bool canBuildMinor(Minor_Structure kind, Major* keep_ptr)
 {
+
   if (keep_ptr->getSupportSize()>=keep_ptr->getLimit()) //check if the keep has enough space for the minor
   {
     std::cout<<"This "<<keep_ptr->getTypeString()<<" has already used all of its space\n";
@@ -466,6 +467,11 @@ bool canBuildMinor(Minor_Structure kind, Major* keep_ptr)
   {
     std::cout<<"This "<<keep_ptr->getTypeString()<<" does not have the right type of land\n";
     return false;
+  }
+  else if (!keep_ptr->isOccupied())
+  {
+    std::cout<<"This "<<keep_ptr->getTypeString()<<" is occupied by a barbarian tribe\n";
+    return false;//return false because not enough space will automatically disable a major from adding a support
   }
   else if (!getMaterials(kind, keep_ptr)) //check if the major has enough material
   {
