@@ -164,12 +164,3 @@ int* Menu::getChoice()
   return new int(choice);
 }
 
-/*
-std::string Menu::getChoice()
-{
-  int choice;
-  cin>>choice;
-  return getOption(choice-1); //choice-1 is done because all integer options are 0 indexed
-}
-*/
-

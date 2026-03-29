@@ -723,8 +723,16 @@ int Major::attack(Major* target_ptr)
     {
       std::cout<<"What do you wish to do:\n";
       std::cout<<"\t1. continue\n\t2. retreat\n";
-      int action;
-      std::cin>>action;
+      int* action_ptr=nullptr;
+      while (action_ptr==nullptr)
+      {
+        action_ptr=getInt();
+        if (action_ptr==nullptr)
+        {
+          std::cout<<"please enter 1 or 2\n";
+        }
+      } 
+      int action=*action_ptr;
       if (action==2)
       {
         retreat=true;

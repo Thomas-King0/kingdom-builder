@@ -115,24 +115,10 @@ int main(void)
         //cout<<"where would you like to produce:\n";
         Menu production_menu=Menu("Choose a structure to start production");
         production_menu.setColor(208);
-/*
-        for (int i=0; i<structure_list.size(); i+=1)
-        {
-          Major* major_ptr=structure_list.at(i);
-          production_menu.addOption(major_ptr->getName());
-        }
-*/
+
         production_menu.addOption(listStructures(&structure_list)); //add the list of structures to the production menu options
         production_menu.display();
-/*
-        int choice;
-        cin>>choice;
-        cout<<"getting the choice\n";
-        string name=production_menu.getOption(choice);
-        cout<<"user chose "<<name<<"\n";
-        //getName(&name);
-        //getCoords(&pos_x, &pos_y); //get the coordinates of the structure
-*/
+
         int index;
         int* choice_ptr=production_menu.getChoice();
         if (choice_ptr!=nullptr)
@@ -155,11 +141,6 @@ int main(void)
       }
       case (2): //build
       {
-/*
-        cout<<"what would you like to build:\n\t1. mine\n\t2. pasture\n\t3. quarry\n\t"
-          <<"4. sawmill\n\t5. garden\n\t6. castle\n\t7. fort\n\t8. village\n\t"
-          <<"9. road\n"; //prompt user for input
-*/
         build_menu.display();
         int action_2=0;
         int* choice_ptr=build_menu.getChoice();
@@ -178,8 +159,13 @@ int main(void)
           {
             cout<<"To build a mine costs 3 animals, 3 wood, and 5 metal\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
-            int cont;
-            cin>>cont;
+            int* cont_ptr=getInt();
+            if (cont_ptr==nullptr)
+            {
+              std::cout<<"that is not a valid input\n";
+              break;
+            }
+            int cont=*cont_ptr;
             if (cont==2)
             {
               break;
@@ -223,8 +209,13 @@ int main(void)
           {
             cout<<"To build a pasture costs 5 animals and 5 wood\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
-            int cont;
-            cin>>cont;
+            int* cont_ptr=getInt();
+            if (cont_ptr==nullptr)
+            {
+              std::cout<<"that is not a valid input\n";
+              break;
+            }
+            int cont=*cont_ptr;
             if (cont==2)
             {
               break;
@@ -267,8 +258,13 @@ int main(void)
           {
             cout<<"To build a quarry costs 5 produce, 2 animals, 5 wood, and 5 metal\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
-            int cont;
-            cin>>cont;
+            int* cont_ptr=getInt();
+            if (cont_ptr==nullptr)
+            {
+              std::cout<<"that is not a valid input\n";
+              break;
+            }
+            int cont=*cont_ptr;
             if (cont==2)
             {
               break;
@@ -307,8 +303,13 @@ int main(void)
           {
             cout<<"To build a sawmill costs 7 wood, 3 stone, and 2 metal\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
-            int cont;
-            cin>>cont;
+            int* cont_ptr=getInt();
+            if (cont_ptr==nullptr)
+            {
+              std::cout<<"that is not a valid input\n";
+              break;
+            }
+            int cont=*cont_ptr;
             if (cont==2)
             {
               break;
@@ -351,8 +352,13 @@ int main(void)
           {
             cout<<"To build a garden costs 5 produce, 2 wood\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
-            int cont;
-            cin>>cont;
+            int* cont_ptr=getInt();
+            if (cont_ptr==nullptr)
+            {
+              std::cout<<"that is not a valid input\n";
+              break;
+            }
+            int cont=*cont_ptr;
             if (cont==2)
             {
               break;
@@ -395,8 +401,13 @@ int main(void)
           {
             cout<<"To build a castle costs 20 stone, 10 wood, 5 metal, and 5 animals\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
-            int cont;
-            cin>>cont;
+            int* cont_ptr=getInt();
+            if (cont_ptr==nullptr)
+            {
+              std::cout<<"that is not a valid input\n";
+              break;
+            }
+            int cont=*cont_ptr;
             if (cont==2)
             {
               break;
@@ -417,8 +428,13 @@ int main(void)
           {
             cout<<"To build a fort costs 2 animals, 10 wood, and 20 stone\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
-            int cont;
-            cin>>cont;
+            int* cont_ptr=getInt();
+            if (cont_ptr==nullptr)
+            {
+              std::cout<<"that is not a valid input\n";
+              break;
+            }
+            int cont=*cont_ptr;
             if (cont==2)
             {
               break;
@@ -439,8 +455,13 @@ int main(void)
           {
             cout<<"To build a village costs 5 wood and 2 animals\ndo you want to continue\n"
               <<"1. continue\n2. exit\n";
-            int cont;
-            cin>>cont;
+            int* cont_ptr=getInt();
+            if (cont_ptr==nullptr)
+            {
+              std::cout<<"that is not a valid input\n";
+              break;
+            }
+            int cont=*cont_ptr;
             if (cont==2)
             {
               break;
@@ -609,10 +630,7 @@ int main(void)
         Menu direction_menu=Menu("Choose direction to explore");
         direction_menu.addOption({"north", "east", "south", "west"});
         direction_menu.display();
-/*
-        cout<<"enter direction to explore\n1. north\n2. east\n3. south\n4. west\n";
-        cin>>direction;
-*/
+
         int direction;
         int* choice_ptr=direction_menu.getChoice();
         if (choice_ptr!=nullptr)
