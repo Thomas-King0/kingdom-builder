@@ -131,7 +131,7 @@ void Barbarian::pillage()
       //seedRandom(major_ptr, i+300);
       int amount_taken=rand()%MAX_PILLAGE+1; //get the amount taken
       int current_population=major_ptr->getPopulation(static_cast<Career>(i));
-      if (amount_taken>current_population)
+      if (amount_taken<current_population)
       {
         major_ptr->setPopulation(static_cast<Career>(i), current_population-amount_taken);
         std::cout<<amount_taken<<" "<<career2string(static_cast<Career>(i))<<"s\n";
