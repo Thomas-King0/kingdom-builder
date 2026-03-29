@@ -519,8 +519,17 @@ int main(void)
             //cout<<"start "<<start_of_road->getName()<<"\n";
             //cout<<"end "<<end_of_road->getName()<<"\n";
 
-            if ((start_of_road!=nullptr)&&(end_of_road!=nullptr))
+            if ((start_of_road==nullptr)||(end_of_road==nullptr))
             // if one of the names was invalid then the corresponding pointer will be the nullptr
+            {
+              break;
+            }
+            else if ((start_of_road->isOccupied())||(end_of_road->isOccupied()))
+            {
+              cout<<"cannot build a road to a structure that is occupied\n";
+              break;
+            }
+            else
             {
               highway.push_back(new Road(start_of_road, end_of_road)); //push back the new road
               cout<<"built a road between "<<start_of_road->getName()<<" and "
@@ -626,6 +635,11 @@ int main(void)
         if (major_ptr->dist(start_x, start_y)>BUILD_DISTANCE)
         {
           cout<<"That tile is too far away\n";
+          break;
+        }
+        else if (major_ptr->isOccupied())
+        {
+          cout<<"cannot explore from an occupied structure\n";
           break;
         }
 
@@ -772,6 +786,11 @@ int main(void)
         if (attacker_ptr==nullptr)
         {
           cout<<"there is no structure with that name\n";
+          break;
+        }
+        else if (attacker_ptr->isOccupied())
+        {
+          cout<<"cannot attack from an occupied structure\n";
           break;
         }
 
