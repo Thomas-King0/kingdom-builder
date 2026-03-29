@@ -160,6 +160,7 @@ int* Menu::getChoice()
       std::cout<<"not a valid choice: pick again\n";
     }
   }
+  std::cout<<"choice is "<<choice<<"\n";
   return new int(choice);
 }
 
