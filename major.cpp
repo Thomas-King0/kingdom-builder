@@ -10,6 +10,7 @@
 #include "road.h"
 #include "caravan.h"
 #include "helpful.h"
+#include "settings.h"
 #include "menu.h"
 
 //constructor

@@ -7,6 +7,7 @@
 
 #include "menu.h"
 #include "helpful.h"
+#include "settings.h"
 
 //Constructor
 Menu::Menu(std::string input_prompt)

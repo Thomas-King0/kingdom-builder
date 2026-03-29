@@ -8,6 +8,7 @@
 #include "major.h"
 #include "barbarian.h"
 #include "helpful.h"
+#include "settings.h"
 
 
 

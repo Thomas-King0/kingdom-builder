@@ -8,6 +8,7 @@
 #include "major.h"
 #include "land.h"
 #include "helpful.h"
+#include "settings.h"
 
 
 class Land; //forward declaration

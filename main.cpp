@@ -21,6 +21,7 @@
 #include "caravan.h"
 #include "barbarian.h"
 #include "helpful.h"
+#include "settings.h"
 #include "menu.h"
 
 using namespace std;
@@ -45,6 +46,7 @@ int main(void)
   test_land[pos2index(MAP_SIZE, MAP_SIZE)].setY(MAP_SIZE); //see above
 
   //structure list
+  std::cout<<"first you need to choose a name for your starting castle\n";
   vector <Major*> structure_list;
   structure_list.push_back(new Castle());
 
@@ -63,10 +65,6 @@ int main(void)
   bool spread=false;
   int wins=0;
 
-
-
-  cout<<"Test 020_5:\n";
-  cout<<"testing barbarians\n";
 
   structure_list[0]->setBase(&test_land[pos2index(MAP_SIZE,MAP_SIZE)]);
   structure_list[0]->setPopulation(TOWNSFOLK,VILLAGE_CAPACITY*2 ); //50); this is just a test
@@ -484,8 +482,8 @@ int main(void)
               break;
             }
 
-            Major* start_of_road;
-            Major* end_of_road;
+            Major* start_of_road=nullptr;
+            Major* end_of_road=nullptr;
             if (location1!=location2) //make sure that the endpoints are different
             {
               start_of_road=structure_list.at(location1); //getStructure(location1, &structure_list); //get the pointer to the start

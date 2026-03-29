@@ -8,6 +8,7 @@
 #include "minor.h"
 #include "land.h"
 #include "helpful.h"
+#include "settings.h"
 #include "menu.h"
 
 //constructor

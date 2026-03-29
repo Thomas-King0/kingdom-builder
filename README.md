@@ -7,5 +7,5 @@ townsfolk in various trades.
 Currently there are only two ways to end the game, the player either chooses the quit option, or they eliminate all of the 
 barbarian tribes in their kingdom three times.
 
-The game settings are currently located in helpful.h have fun playing around with them and let me know if you find any
+The game settings are currently located in settings.h have fun playing around with them and let me know if you find any
 interesting combinations.

@@ -6,6 +6,7 @@ Old-version-tests/
 Quick-save/
 readme-history/
 Makefile
+kingdom-builder_alpha
 make-backup
 test.cpp
 *.o

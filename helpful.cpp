@@ -5,6 +5,7 @@
 #include <limits>
 
 #include "helpful.h"
+#include "settings.h"
 #include "land.h"
 #include "major.h"
 #include "minor.h"

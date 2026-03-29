@@ -6,6 +6,7 @@
 #include "mine.h"
 #include "major.h"
 #include "helpful.h"
+#include "settings.h"
 
 
 //constructor

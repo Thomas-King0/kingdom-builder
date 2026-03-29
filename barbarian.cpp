@@ -7,6 +7,7 @@
 #include "barbarian.h"
 #include "major.h"
 #include "land.h"
+#include "settings.h"
 
 int Barbarian::tribe_count=0; //initialize barbarian counter
 double Barbarian::spread_chance=0.05; //initialize chance of spreading

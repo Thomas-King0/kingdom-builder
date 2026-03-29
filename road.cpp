@@ -9,6 +9,7 @@
 #include "major.h"
 #include "caravan.h"
 #include "helpful.h"
+#include "settings.h"
 
 
 //constructor
