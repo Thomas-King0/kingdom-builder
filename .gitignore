@@ -1,0 +1,13 @@
+BackupI/
+BackupII/
+BackupIII/
+Bug-reports/
+Old-version-tests/
+Quick-save/
+readme-history/
+Makefile
+make-backup
+test.cpp
+*.o
+*.txt
+*.sed

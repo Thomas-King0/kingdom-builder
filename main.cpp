@@ -495,6 +495,8 @@ int main(void)
             {
               cout<<"road endpoints cannot be the same location\n";
             }
+            //cout<<"start "<<start_of_road->getName()<<"\n";
+            //cout<<"end "<<end_of_road->getName()<<"\n";
 
             if ((start_of_road!=nullptr)&&(end_of_road!=nullptr))
             // if one of the names was invalid then the corresponding pointer will be the nullptr
@@ -920,7 +922,7 @@ int main(void)
 //***************************************check barbarians********************************************
     if (Barbarian::tribe_count==0) //if there are not currently barbarians
     {
-      cout<<"Checking for barbarian spawn\n";
+      //cout<<"Checking for barbarian spawn\n";
       int random_number=rand()%100; //generate random number
       //cout<<"random number is "<<random_number<<"\n";
       if  (random_number<5) //||(start_attack))//check if the barbarians spawn
