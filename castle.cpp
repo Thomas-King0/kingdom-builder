@@ -1,0 +1,132 @@
+/*Object file for Castle class
+ */
+
+#include <iostream>
+
+#include "castle.h"
+
+#include "minor.h"
+#include "land.h"
+#include "helpful.h"
+#include "menu.h"
+
+//constructor
+Castle::Castle(): Major()
+{
+  Major::setLimit(CASTLE_LIMIT); //adjust the land limit
+  setVacancy(CASTLE_CAPACITY); //set the vacancy of the village, it starts out empty
+  Major::setType(CASTLE); //set the type of the structure
+  for (int resource=PRODUCE; resource<VACUUM; resource+=1)
+  {
+    materials.push_back(0); //initialize the list of materials, the village starts out with none
+  }
+}
+
+//isValid
+bool Castle::isValid(Land* base) //return whether the input land is a valid base
+{
+  switch (base->getType())
+  {
+    case FOREST: //castles can go on forest and fields
+    case FIELDS:
+      return true;
+    default:
+      return false;
+  }
+}
+
+//setVacancy
+void Castle::setVacancy(int num) //set the amount of space the castle has left
+{
+  if (num<=CASTLE_CAPACITY)
+  {
+    Major::setVacancy(num);
+  }
+  else
+  {
+    std::cout<<"Tried setting the vacancy of a castle to a number ["<<num
+      <<"greater than the castle capacity ["<<CASTLE_CAPACITY<<"\n";
+  }
+}
+
+//setMaterials
+void Castle::setMaterials(Material resource, int num) //set the amount of materials that the castle has
+{
+  if (num>=0)
+  {
+    materials.at(resource)=num;
+  }
+}
+
+//getMaterials
+int Castle::getMaterials(Material resource)
+{
+  return materials.at(resource);
+}
+
+int Castle::getMaterials(int resource)
+{
+  return materials.at(static_cast<Material>(resource));
+}
+
+//trainTownsfolk
+void Castle::trainTownsfolk()
+{
+  std::cout<<"This "<<getTypeString()<<" has "<<getPopulation(TOWNSFOLK)<<" townsfolk\n"
+    <<"how many would you like to train: "; //get the player input
+  int num_to_train; //store it in variable num_to_train
+  std::cin>>num_to_train;
+  if (num_to_train<0) //make sure the player entered a positive number
+  {
+    std::cout<<"Number must be positive\n";
+  }
+  else if (num_to_train>getPopulation(TOWNSFOLK)) //make sure that the castle has that many townsfolk
+  {
+    std::cout<<"This "<<getTypeString()<<" does not have that many townsfolk\n";
+  }
+  else
+  {
+    Menu train_menu=Menu("Choose trade to train townsfolk in");
+    train_menu.addOption({"farmer", "lumberjack", "miner", "shepherd", "stone mason", "soldier"});
+    train_menu.display();
+/*
+    std::cout<<"What trade are they being trained in:\n\t1. farmer\n\t2. lumberjack\n\t3. miner\n\t"
+      <<"4. shepherd\n\t5. stone mason\n\t6. soldier\n"; //get the trade they are being trained in
+*/
+    int input=*train_menu.getChoice();
+    //std::cin>>input;
+    if ((input>0)&&(input<=6)) //input needs to be between 0 and 6 because there are 6 trades
+    {
+      Career profession=static_cast<Career>(input-1); //cast the input integer to a Career enumerated type
+      setPopulation(profession, getPopulation(profession)+num_to_train); //increase the population of tradesmen
+      setPopulation(TOWNSFOLK, getPopulation(TOWNSFOLK)-num_to_train); //decrease the population of townsfolk
+    }
+    else
+    {
+      std::cout<<"Please input a valid trade\n";
+    }
+  }
+}
+
+//getDefense
+double Castle::getDefense()
+{
+  return CASTLE_DEFENSE;
+}
+
+//getData
+std::string Castle::getData()
+{
+  std::string data="";
+  //------------------------Major structure data--------------------------
+  data+=this->Major::getData(); //call the base class function first
+
+  //materials data
+  data+="\033[38;5;200m  ********Inventory********\033[0m\n";
+  for (int i=PRODUCE; i<VACUUM; i+=1)
+  {
+    data+=("  "+fillString(material2string(static_cast <Material>(i))+":",20)+int2string(getMaterials(i))+"\n");
+  }
+
+  return data;
+}
