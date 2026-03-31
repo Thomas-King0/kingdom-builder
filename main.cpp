@@ -858,11 +858,7 @@ int main(void)
         Menu name_menu=Menu("Choose structure to rename");
         name_menu.addOption(listStructures(&structure_list));
         name_menu.display();
-/*
-        cout<<"What structure do you want to rename: ";
-        string name;
-        getName(&name);
-*/
+
         int index;
         int* choice_ptr=name_menu.getChoice();
         if (choice_ptr!=nullptr)
@@ -894,6 +890,7 @@ int main(void)
         cont=false;
         break;
       }
+      /*
       case (14): //this is only for testing
       {
         cout<<"Debug: set start_attack=true;\n";
@@ -967,7 +964,7 @@ int main(void)
       //cout<<"Checking for barbarian spawn\n";
       int random_number=rand()%100; //generate random number
       //cout<<"random number is "<<random_number<<"\n";
-      if  ((random_number<5)||(start_attack))//check if the barbarians spawn
+      if  (random_number<5) //||(start_attack))//check if the barbarians spawn
       {
         Major* major_ptr=furthestStructure(&structure_list); //get the furthest structure
         cout<<"A barbarian tribe is attacking "<<major_ptr->getName()<<"\n"; //tell the player about the attack
