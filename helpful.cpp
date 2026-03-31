@@ -420,7 +420,6 @@ void buildMajor(Major_Structure kind, Land* tile_ptr, std::vector<Major*>* struc
 {
   Major* closest_ptr=closestStructure(tile_ptr->getX(), tile_ptr->getY(), structure_vector);
 
-  std::cout<<"got closest structure\n";
   if (!(tile_ptr->getKeep()==nullptr)) //if the land is not empty
   {
     std::cout<<"That tile is already attached to a structure\n";

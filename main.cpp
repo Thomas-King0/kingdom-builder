@@ -79,7 +79,7 @@ int main(void)
 
   //menus
   vector<string> action_options={"produce", "build", "train townsfolk", "display data", "display map", "explore", "claim land", "list structure",
-    "transport cargo", "wait", "attack", "rename a structure", "quit", "start barbarian attack"};
+    "transport cargo", "wait", "attack", "rename a structure", "quit"};
   Menu action_menu=Menu("Choose an action", action_options);
   action_menu.setColor(105);
 
@@ -503,39 +503,63 @@ int main(void)
             {
               break;
             }
-            cout<<"got choices\n";
 
-            Major* start_of_road=nullptr;
-            Major* end_of_road=nullptr;
+            Major* start_ptr=nullptr;
+            Major* end_ptr=nullptr;
             if (location1!=location2) //make sure that the endpoints are different
             {
-              start_of_road=structure_list.at(location1-1); //getStructure(location1, &structure_list); //get the pointer to the start
-              end_of_road=structure_list.at(location2-1); //getStructure(location2, &structure_list); //get the pointer to the end
+              start_ptr=structure_list.at(location1-1); //getStructure(location1, &structure_list); //get the pointer to the start
+              end_ptr=structure_list.at(location2-1); //getStructure(location2, &structure_list); //get the pointer to the end
             }
             else
             {
               cout<<"road endpoints cannot be the same location\n";
-            }
-            //cout<<"start "<<start_of_road->getName()<<"\n";
-            //cout<<"end "<<end_of_road->getName()<<"\n";
-
-            if ((start_of_road==nullptr)||(end_of_road==nullptr))
-            // if one of the names was invalid then the corresponding pointer will be the nullptr
-            {
               break;
             }
-            else if ((start_of_road->isOccupied())||(end_of_road->isOccupied()))
+
+            int cost=3*dist(start_ptr, end_ptr); //get the cost for the road (3 stone per unit length)
+
+            if ((start_ptr==nullptr)||(end_ptr==nullptr))
+            // if one of the names was invalid then the corresponding pointer will be the nullptr
+            {
+              cout<<"Entered an invalid name\n";
+              break;
+            }
+            else if ((start_ptr->isOccupied())||(end_ptr->isOccupied()))
             {
               cout<<"cannot build a road to a structure that is occupied\n";
               break;
             }
+            else if (start_ptr->getMaterials(STONE)<cost)
+            {
+              cout<<"that "<<start_ptr->getTypeString()<<" does not have enough resources for a road that long\n";
+              break;
+            }
             else
             {
-              highway.push_back(new Road(start_of_road, end_of_road)); //push back the new road
-              cout<<"built a road between "<<start_of_road->getName()<<" and "
-                <<end_of_road->getName()<<"\n";
+              cout<<"this road will cost "<<cost<<" stone to build\n 1. continue\n 2. exit\n";
+              int* choice_ptr=getInt();
+              int choice;
+              if (choice_ptr==nullptr)
+              {
+                break;
+              }
+              else
+              {
+                choice=*choice_ptr; 
+              }
+
+              if (choice!=1)
+              {
+                break;
+              }
+
+              int current_stone=start_ptr->getMaterials(STONE);
+              start_ptr->setMaterials(STONE, current_stone-cost);
+              highway.push_back(new Road(start_ptr, end_ptr)); //push back the new road
+              cout<<"built a road between "<<start_ptr->getName()<<" and "
+                <<end_ptr->getName()<<"\n";
             }
-            cout<<"end of build road\n";
             break;
           }
           default:
