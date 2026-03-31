@@ -133,7 +133,7 @@ int main(void)
         Major* keep_ptr=structure_list.at(index-1); //getStructure(name, &structure_list);
         if (keep_ptr->canProduce()==false) //if the structure cannot produce
         {
-          cout<<"That structure cannot produce\n";
+          cout<<"\033[31mThat structure cannot produce\033[0m\n";
           break;
         }
         keep_ptr->startProduction(); //start production in structure_list
@@ -162,7 +162,7 @@ int main(void)
             int* cont_ptr=getInt();
             if (cont_ptr==nullptr)
             {
-              std::cout<<"that is not a valid input\n";
+              std::cout<<"\033[31mthat is not a valid input\033[0m\n";
               break;
             }
             int cont=*cont_ptr;
@@ -172,7 +172,7 @@ int main(void)
             }
             else if (cont!=1)
             {
-              cout<<cont<<" is not a valid input\n";
+              cout<<"\033[31m"<<cont<<" is not a valid input\033[0m\n";
               break;
             }
             Menu location_menu=Menu("Where would you like to build this mine");
@@ -197,11 +197,11 @@ int main(void)
               minor_list.push_back(new Mine());
               major_ptr->addSupport(minor_list.at(minor_list.size()-1));
               //add the mine as a support to the keep
-              cout<<"built a mine at "<<major_ptr->getName()<<"\n";
+              cout<<"\033[32mbuilt a mine at "<<major_ptr->getName()<<"\033[0m\n";
             }
             else
             {
-              cout<<"cannot build a mine there\n";
+              cout<<"\033[31mcannot build a mine there\033[0m\n";
             }
             break;
           }
@@ -212,7 +212,7 @@ int main(void)
             int* cont_ptr=getInt();
             if (cont_ptr==nullptr)
             {
-              std::cout<<"that is not a valid input\n";
+              cout<<"\033[31mthat is not a valid input\033[0m\n";
               break;
             }
             int cont=*cont_ptr;
@@ -222,7 +222,7 @@ int main(void)
             }
             else if (cont!=1)
             {
-              cout<<cont<<" is not a valid input\n";
+              cout<<"\033[31m"<<cont<<" is not a valid input\033[0m\n";
               break;
             }
             Menu location_menu=Menu("Where would you like to build this pasture");
@@ -246,11 +246,11 @@ int main(void)
               minor_list.push_back(new Pasture());
               major_ptr->addSupport(minor_list.at(minor_list.size()-1));
               //add the mine as a support to the keep
-              cout<<"built a pasture at "<<major_ptr->getName()<<"\n";
+              cout<<"\033[32mBuilt a pasture at "<<major_ptr->getName()<<"\033[0m\n";
             }
             else
             {
-              cout<<"cannot build a pasture there\n";
+              cout<<"\033[31mCannot build a pasture there\033[0m\n";
             }
             break;
           }
@@ -261,7 +261,7 @@ int main(void)
             int* cont_ptr=getInt();
             if (cont_ptr==nullptr)
             {
-              std::cout<<"that is not a valid input\n";
+              std::cout<<"\033[31mthat is not a valid input\033[0m\n";
               break;
             }
             int cont=*cont_ptr;
@@ -271,7 +271,7 @@ int main(void)
             }
             else if (cont!=1)
             {
-              cout<<cont<<" is not a valid input\n";
+              cout<<"\033[31m"<<cont<<" is not a valid input\033[0m\n";
               break;
             }
             Menu location_menu=Menu("Where would you like to build this quarry");
@@ -291,11 +291,11 @@ int main(void)
               minor_list.push_back(new Quarry());
               major_ptr->addSupport(minor_list.at(minor_list.size()-1));
               //add the mine as a support to the keep
-              cout<<"built a quarry at "<<major_ptr->getName()<<"\n";
+              cout<<"\033[32mbuilt a quarry at "<<major_ptr->getName()<<"\033[0m\n";
             }
             else
             {
-              cout<<"cannot build a quarry there\n";
+              cout<<"\033[31mcannot build a quarry there\033[0m\n";
             }
             break;
           }
@@ -306,7 +306,7 @@ int main(void)
             int* cont_ptr=getInt();
             if (cont_ptr==nullptr)
             {
-              std::cout<<"that is not a valid input\n";
+              std::cout<<"\033[31mthat is not a valid input\033[0m\n";
               break;
             }
             int cont=*cont_ptr;
@@ -316,7 +316,7 @@ int main(void)
             }
             else if (cont!=1)
             {
-              cout<<cont<<" is not a valid input\n";
+              cout<<"\033[31m"<<cont<<" is not a valid input\033[0m\n";
               break;
             }
             Menu location_menu=Menu("Where would you like to build this sawmill");
@@ -341,11 +341,11 @@ int main(void)
               minor_list.push_back(new Sawmill());
               major_ptr->addSupport(minor_list.at(minor_list.size()-1));
               //add the mine as a support to the keep
-              cout<<"built a sawmill at "<<major_ptr->getName()<<"\n";
+              cout<<"\033[32mbuilt a sawmill at "<<major_ptr->getName()<<"\033[0m\n";
             }
             else
             {
-              cout<<"cannot build a sawmill there\n";
+              cout<<"\033[31mcannot build a sawmill there\033[0m\n";
             }
             break;
           }
@@ -356,7 +356,7 @@ int main(void)
             int* cont_ptr=getInt();
             if (cont_ptr==nullptr)
             {
-              std::cout<<"that is not a valid input\n";
+              std::cout<<"\033[31mthat is not a valid input\033[0m\n";
               break;
             }
             int cont=*cont_ptr;
@@ -366,7 +366,7 @@ int main(void)
             }
             else if (cont!=1)
             {
-              cout<<cont<<" is not a valid input\n";
+              cout<<"\033[31m"<<cont<<" is not a valid input\033[0m\n";
               break;
             }
             Menu location_menu=Menu("Where would you like to build this garden");
@@ -390,11 +390,11 @@ int main(void)
               minor_list.push_back(new Garden());
               major_ptr->addSupport(minor_list.at(minor_list.size()-1));
               //add the mine as a support to the keep
-              cout<<"built a garden at "<<major_ptr->getName()<<"\n";
+              cout<<"\033[32mbuilt a garden at "<<major_ptr->getName()<<"\033[0m\n";
             }
             else
             {
-              cout<<"cannot build a garden there\n";
+              cout<<"\033[31mcannot build a garden there\033[0m\n";
             }
             break;
           }
@@ -405,7 +405,7 @@ int main(void)
             int* cont_ptr=getInt();
             if (cont_ptr==nullptr)
             {
-              std::cout<<"that is not a valid input\n";
+              std::cout<<"\033[31mthat is not a valid input\033[0m\n";
               break;
             }
             int cont=*cont_ptr;
@@ -415,7 +415,7 @@ int main(void)
             }
             else if (cont!=1)
             {
-              cout<<cont<<" is not a valid input\n";
+              cout<<"\033[31m"<<cont<<" is not a valid input\033[0m\n";
               break;
             }
             cout<<"Enter coordinates for castle: ";
@@ -432,7 +432,7 @@ int main(void)
             int* cont_ptr=getInt();
             if (cont_ptr==nullptr)
             {
-              std::cout<<"that is not a valid input\n";
+              std::cout<<"\033[31mthat is not a valid input\033[0m\n";
               break;
             }
             int cont=*cont_ptr;
@@ -442,7 +442,7 @@ int main(void)
             }
             else if (cont!=1)
             {
-              cout<<cont<<" is not a valid input\n";
+              cout<<"\033[31m"<<cont<<" is not a valid input\033[0m\n";
               break;
             }
             cout<<"Enter coordinates for fort: ";
@@ -459,7 +459,7 @@ int main(void)
             int* cont_ptr=getInt();
             if (cont_ptr==nullptr)
             {
-              std::cout<<"that is not a valid input\n";
+              std::cout<<"\033[31mthat is not a valid input\033[0m\n";
               break;
             }
             int cont=*cont_ptr;
@@ -469,7 +469,7 @@ int main(void)
             }
             else if (cont!=1)
             {
-              cout<<cont<<" is not a valid input\n";
+              cout<<"\033[0m"<<cont<<" is not a valid input\033[0m\n";
             }
             cout<<"Enter coordinates for village: ";
             int coord_x;
@@ -513,7 +513,7 @@ int main(void)
             }
             else
             {
-              cout<<"road endpoints cannot be the same location\n";
+              cout<<"\033[31mroad endpoints cannot be the same location\033[0m\n";
               break;
             }
 
@@ -522,17 +522,17 @@ int main(void)
             if ((start_ptr==nullptr)||(end_ptr==nullptr))
             // if one of the names was invalid then the corresponding pointer will be the nullptr
             {
-              cout<<"Entered an invalid name\n";
+              cout<<"\033[31mEntered an invalid name\033[0m\n";
               break;
             }
             else if ((start_ptr->isOccupied())||(end_ptr->isOccupied()))
             {
-              cout<<"cannot build a road to a structure that is occupied\n";
+              cout<<"\033[31mcannot build a road to a structure that is occupied\033[0m\n";
               break;
             }
             else if (start_ptr->getMaterials(STONE)<cost)
             {
-              cout<<"that "<<start_ptr->getTypeString()<<" does not have enough resources for a road that long\n";
+              cout<<"\033[31mthat "<<start_ptr->getTypeString()<<" does not have enough resources for a road that long\033[0m\n";
               break;
             }
             else
@@ -557,14 +557,14 @@ int main(void)
               int current_stone=start_ptr->getMaterials(STONE);
               start_ptr->setMaterials(STONE, current_stone-cost);
               highway.push_back(new Road(start_ptr, end_ptr)); //push back the new road
-              cout<<"built a road between "<<start_ptr->getName()<<" and "
-                <<end_ptr->getName()<<"\n";
+              cout<<"\033[32mbuilt a road between "<<start_ptr->getName()<<" and "
+                <<end_ptr->getName()<<"\033[0m\n";
             }
             break;
           }
           default:
           {
-            cout<<action_2<<" does not designate a valid structure"<<"\n";
+            cout<<"\033[31m"<<action_2<<" does not designate a valid structure"<<"\033[0m\n";
             break;
           }
         }
@@ -575,11 +575,7 @@ int main(void)
         Menu train_menu=Menu("Where would you like to train townsfolk");
         train_menu.addOption(listStructures(&structure_list));
         train_menu.display();
-/*
-        cout<<"where are the townsfolk that you want to train:\n";
-        string name;
-        getName(&name); //get the name of the stucture
-*/
+
         int index;
         int* choice_ptr=train_menu.getChoice();
         if (choice_ptr!=nullptr)
@@ -598,11 +594,6 @@ int main(void)
         Menu data_menu=Menu("Choose structure to display data");
         data_menu.addOption(listStructures(&structure_list));
         data_menu.display();
-/*
-        cout<<"What structure would you like to display data for: ";
-        string name;
-        getName(&name);
-*/
 
         int index;
         int* choice_ptr=data_menu.getChoice();
@@ -622,11 +613,6 @@ int main(void)
         Menu map_menu=Menu("Choose structure to center on");
         map_menu.addOption(listStructures(&structure_list));
         map_menu.display();
-/*
-        cout<<"enter name of structure to center on\n";
-        string name;
-        getName(&name);
-*/
         
         int index;
         int* choice_ptr=map_menu.getChoice();
@@ -658,12 +644,12 @@ int main(void)
 
         if (major_ptr->dist(start_x, start_y)>BUILD_DISTANCE)
         {
-          cout<<"That tile is too far away\n";
+          cout<<"\033[31mThat tile is too far away\033[0m\n";
           break;
         }
         else if (major_ptr->isOccupied())
         {
-          cout<<"cannot explore from an occupied structure\n";
+          cout<<"\033[31mcannot explore from an occupied structure\033[0m\n";
           break;
         }
 
@@ -685,20 +671,16 @@ int main(void)
         }
         else
         {
-          cout<<"the land at "<<displayCoords(start_x, start_y)<<" has not been explored yet\n";
+          cout<<"\033[31mthe land at "<<displayCoords(start_x, start_y)<<" has not been explored yet\033[0m\n";
         }
         break;
       } //end explore
-      case(7): //claim land //READY FOR INITIAL PLAYTEST
+      case(7): //claim land 
       {
         Menu claim_menu=Menu("Choose structure to claim land for");
         claim_menu.addOption(listStructures(&structure_list));
         claim_menu.display();
-/*
-        cout<<"What structure are you claiming the land for: ";
-        string name;
-        getName(&name);
-*/
+
         int index;
         int* choice_ptr=claim_menu.getChoice();
         if (choice_ptr!=nullptr)
@@ -713,7 +695,7 @@ int main(void)
         }
         else if (major_ptr->isOccupied())
         {
-          cout<<"an occupied structure cannot claim land\n";
+          cout<<"\033[31mAn occupied structure cannot claim land\033[0m\n";
           break;
         }
 
@@ -735,7 +717,7 @@ int main(void)
         }
         else
         {
-          cout<<"That "<<major_ptr->getTypeString()<<" has already maxed out its claims\n";
+          cout<<"\033[31mThat "<<major_ptr->getTypeString()<<" has already maxed out its claims\033[0m\n";
         }
         break;
       }
@@ -755,11 +737,7 @@ int main(void)
         Menu transport_menu=Menu("Select location to send caravan from");
         transport_menu.addOption(listStructures(&structure_list));
         transport_menu.display();
-/*
-        cout<<"where is this caravan coming from: ";
-        string sender;
-        getName(&sender);
-*/
+
         int index;
         int* choice_ptr=transport_menu.getChoice();
         if (choice_ptr!=nullptr)
@@ -772,7 +750,7 @@ int main(void)
         {
           if (sender_ptr->isOccupied()) //if the chosen structure is not occupied
           {
-            cout<<"cannot send a caravan from an occupied structure\n";
+            cout<<"\033[31mcannot send a caravan from an occupied structure\033[0m\n";
           }
           else
           {
@@ -781,7 +759,7 @@ int main(void)
         }
         else
         {
-          cout<<"there is no structure with that name\n";
+          cout<<"\033[31mthere is no structure with that name\033[0m\n";
         }
         break;
       }
@@ -795,11 +773,7 @@ int main(void)
         Menu attack_menu=Menu("Choose location to attack with");
         attack_menu.addOption(listStructures(&structure_list));
         attack_menu.display();
-/*
-        cout<<"Where are you attacking:\n";
-        string target_name;
-        getName(&target_name);
-*/
+
         int index;
         int* choice_ptr=attack_menu.getChoice();
         if (choice_ptr!=nullptr)
@@ -809,12 +783,12 @@ int main(void)
         Major* attacker_ptr=structure_list.at(index-1); //getStructure(target_name, &structure_list);
         if (attacker_ptr==nullptr)
         {
-          cout<<"there is no structure with that name\n";
+          cout<<"\033[31mthere is no structure with that name\033[0m\n";
           break;
         }
         else if (attacker_ptr->isOccupied())
         {
-          cout<<"cannot attack from an occupied structure\n";
+          cout<<"\033[31mcannot attack from an occupied structure\033[0m\n";
           break;
         }
 
@@ -837,7 +811,7 @@ int main(void)
         Major* target_ptr=structure_list.at(index2-1); //getStructure(attacker_name, &structure_list);
         if (target_ptr==nullptr)
         {
-          cout<<"there is no structure with that name\n";
+          cout<<"\033[31mthere is no structure with that name\033[0m\n";
         }
 
         //************************************************attack***********************************************
@@ -846,7 +820,7 @@ int main(void)
           int result=attacker_ptr->attack(target_ptr);
           if (result==1)
           {
-            cout<<"you defeated the barbarians at "<<target_ptr->getName()<<"\n";
+            cout<<"\033[32myou defeated the barbarians at "<<target_ptr->getName()<<"\033[0m\n";
             for (int i=0; i<Barbarian::tribe_count; i+=1) //remove the pointer from the barbarian vector
             {
               if (tribes.at(i)->getKeep()==target_ptr) //if the current tribe is the one that was defeated
@@ -862,18 +836,18 @@ int main(void)
             {
               wins+=1;
               cout<<"you removed all the barbarian tribes from your kingdom\n";
-              cout<<"remove all tribes "<<3-wins<<"more times to win\n";
+              cout<<"remove all tribes \033[38;5;220m"<<3-wins<<"\033[0m more times to win\n";
             }
             target_ptr->setOccupants(nullptr);
           }
           else if (result==0)
           {
-            cout<<"the barbarians won\n";
+            cout<<"\033[31mthe barbarians won\033[0m\n";
           }
         }
         else
         {
-          cout<<"that structure is not occupied by a barbarian tribe\n";
+          cout<<"\033[31mthat structure is not occupied by a barbarian tribe\033[0m\n";
         }
         break;
       }
@@ -892,7 +866,7 @@ int main(void)
         Major* major_ptr=structure_list.at(index-1); //getStructure(name, &structure_list);
         if (major_ptr==nullptr)
         {
-          cout<<"There is no structure with that name\n";
+          cout<<"\033[31mThere is no structure with that name\033[0m\n";
           break;
         }
 
@@ -905,7 +879,7 @@ int main(void)
         }
         else
         {
-          cout<<"there is already a structure with that name\n";
+          cout<<"\033[31mthere is already a structure with that name\033[0m\n";
         }
         break;
       }
@@ -942,7 +916,7 @@ int main(void)
       }*/
       default:
       {
-        cout<<action<<" not a valid action: please choose a valid action\n";
+        cout<<"\033[31m"<<action<<" not a valid action: please choose a valid action\033[0m\n";
         break;
       }
     }
@@ -991,21 +965,21 @@ int main(void)
       if  (random_number<5) //||(start_attack))//check if the barbarians spawn
       {
         Major* major_ptr=furthestStructure(&structure_list); //get the furthest structure
-        cout<<"A barbarian tribe is attacking "<<major_ptr->getName()<<"\n"; //tell the player about the attack
+        cout<<"\033[1;31mA barbarian tribe is attacking "<<major_ptr->getName()<<"\033[0m\n"; //tell the player about the attack
         pause(1);
         Village steppes=Village(); //give the barbarians a beginning structure tile to start from
         Barbarian* tribe_ptr=new Barbarian(&steppes);
         tribe_ptr->setPopulation(25);
         if (tribe_ptr->getKeep()->attack(major_ptr))
         {
-          cout<<"the barbarians won\n";
+          cout<<"\033[31mthe barbarians won\033[0m\n";
           tribe_ptr->setKeep(major_ptr); //set the major as the keep
           tribes.push_back(tribe_ptr); //initialize the barbarians
           barbarian_invasion=true;
         }
         else
         {
-          cout<<"you fended off the barbarians\n";
+          cout<<"\033[32myou fended off the barbarians\033[0m\n";
           Barbarian::tribe_count-=1; //decrement the tribe counter
         }
         start_attack=false;
@@ -1048,7 +1022,7 @@ int main(void)
 
           if (tribes.at(i)->getKeep()->attack(target_ptr))
           {
-            cout<<"the barbarians won\n";
+            cout<<"\033[31mthe barbarians won\033[0m\n";
             Barbarian* tribe_ptr=new Barbarian(target_ptr); //initialize the new tribe
             int roamers=tribes.at(i)->getPopulation()*0.1; //the number of barbarians moving to the new keep
             tribe_ptr->setPopulation(roamers); //set the population of the new tribe
@@ -1059,7 +1033,7 @@ int main(void)
           }
           else
           {
-            cout<<"you fended off the barbarians\n";
+            cout<<"\033[32myou fended off the barbarians\033[0m\n";
           }
         }
       }
@@ -1068,7 +1042,7 @@ int main(void)
 //********************************************check for end of game**************************************************
     if (wins==3)
     {
-      cout<<"Congratulations! You won! You fended off the barbarian hordes three times, showing that your"
+      cout<<"\033[1;32mCongratulations! You won!\033[0m You fended off the barbarian hordes three times, showing that your"
         <<"kingdom is strong enough to protect itself.\n Thanks for playing\n";
       cont=false;
     }

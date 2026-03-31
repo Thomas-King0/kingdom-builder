@@ -161,8 +161,6 @@ Major* Barbarian::getTarget()
   }
   else
   {
-    //int add=0; //declare the random noise variable
-    //This is so that when running through the while loop srand does not have the same seed each time
     while (true)
     {
       int random_number=rand()%keep_ptr->getHighwaySize(); //get a random number between 0 and the highway size

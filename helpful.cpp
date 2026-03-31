@@ -467,7 +467,7 @@ bool canBuildMinor(Minor_Structure kind, Major* keep_ptr)
     std::cout<<"This "<<keep_ptr->getTypeString()<<" does not have the right type of land\n";
     return false;
   }
-  else if (!keep_ptr->isOccupied())
+  else if (keep_ptr->isOccupied())
   {
     std::cout<<"This "<<keep_ptr->getTypeString()<<" is occupied by a barbarian tribe\n";
     return false;//return false because not enough space will automatically disable a major from adding a support

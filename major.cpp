@@ -395,7 +395,6 @@ bool Major::canProduce()
       return true; //the major can produce
     }
   }
-  std::cout<<"all "<<getSupportSize()<<" of this "<<getTypeString()<<"'s supports are producing\n";
   return false; //if the for loop runs its course then the major cannot produce
 }
 

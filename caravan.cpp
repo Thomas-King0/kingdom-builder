@@ -21,19 +21,17 @@ Caravan::Caravan(Major* destination_ptr)
   if (action==1)
   {
     Menu cargo_menu=Menu("Choose what tradesmen to put in this caravan");
-    //std::cout<<"What group of people is in this caravan:";
     for (int i=0;i<=static_cast<int>(TOWNSFOLK); i+=1)
     {
       //std::cout<<"\n\t"<<(i+1)<<". "<<career2string(static_cast<Career>(i));
       cargo_menu.addOption(career2string(static_cast<Career>(i)));
     }
     cargo_menu.display();
-    //std::cout<<"\n";
-    //std::cin>>cargo;
+
     int cargo=*cargo_menu.getChoice();
     if ((cargo<(static_cast<int>(FARMER)+1)||(cargo>(static_cast<int>(TOWNSFOLK)+1))))
     {
-      std::cout<<"["<<cargo<<"] does not specify a valid group of people\n";
+      std::cout<<"\033[31m["<<cargo<<"] does not specify a valid trade\033[0m\n";
       setDestination(nullptr);
       return;
     }
@@ -45,7 +43,6 @@ Caravan::Caravan(Major* destination_ptr)
   }
   else if (action==2)
   {
-    std::cout<<"What material is in this caravan:";
     Menu cargo_menu=Menu("Choose material to send");
     for (int i=0; i<static_cast<int>(VACUUM); i+=1)
     {
@@ -53,12 +50,11 @@ Caravan::Caravan(Major* destination_ptr)
       cargo_menu.addOption(material2string(static_cast<Material>(i)));
     }
     cargo_menu.display();
-    //std::cout<<"\n";
-    //std::cin>>cargo;
+
     int cargo=*cargo_menu.getChoice();
     if ((cargo<static_cast<int>(PRODUCE)+1)||(cargo>(static_cast<int>(VACUUM))))
     {
-      std::cout<<"["<<cargo<<"] does not specify a valid type of material\n";
+      std::cout<<"\033[31m["<<cargo<<"] does not specify a valid type of materials\033[0m\n";
       setDestination(nullptr);
       return;
     }
@@ -70,7 +66,7 @@ Caravan::Caravan(Major* destination_ptr)
   }
   else
   {
-    std::cout<<"["<<action<<"] does not specify a valid cargo\n";
+    std::cout<<"\033[31m["<<action<<"] does not specify a valid cargo\033[0m\n";
     setDestination(nullptr);
     return;
   }
@@ -80,13 +76,13 @@ Caravan::Caravan(Major* destination_ptr)
   //std::cin>>num;
   if (num<0)
   {
-    std::cout<<"cannot transport a negative amount\n";
+    std::cout<<"\033[31mcannot transport a negative amount\033[0m\n";
     setDestination(nullptr);
     return;
   }
   else if ((num>destination_ptr->getVacancy())&&(!isMaterials()))
   {
-    std::cout<<destination_ptr->getName()<<" does not have the space for that many people\n";
+    std::cout<<"\033[31m"<<destination_ptr->getName()<<" does not have the space for that many people\033[0m\n";
     setDestination(nullptr);
     return;
   }
@@ -178,7 +174,7 @@ void Caravan::setAmount(int num)
 std::string Caravan::getData()
 {
   
-  std::string data="  ********Caravan data********\n";
+  std::string data="\033[38;5;226m  ********Caravan data********\033[0m\n";
 
   //contents
   if (isMaterials())

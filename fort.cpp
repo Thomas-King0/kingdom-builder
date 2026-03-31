@@ -86,18 +86,18 @@ void Fort::trainTownsfolk()
     int* num_ptr=getInt();
     if (num_ptr==nullptr) //make sure the player entered a valid input
     {
-      std::cout<<"that is not a valid input\n";
+      std::cout<<"\033[31mthat is not a valid input\033[0m\n";
       return;
     }
 
     int num_to_train=*num_ptr;
     if (num_to_train<0) //make sure the player entered a positive number
     {
-      std::cout<<"Number must be positive\n";
+      std::cout<<"\033[31mNumber must be positive\033[0m\n";
     }
     else if (num_to_train>getPopulation(TOWNSFOLK)) //make sure that the castle has that many townsfolk
     {
-      std::cout<<"This "<<getTypeString()<<" does not have that many townsfolk\n";
+      std::cout<<"\033[31mThis "<<getTypeString()<<" does not have that many townsfolk\033[0m\n";
     }
     else
     {
@@ -108,7 +108,7 @@ void Fort::trainTownsfolk()
   }
   else
   {
-    std::cout<<"Please input a valid trade\n";
+    std::cout<<"\033[31mPlease input a valid trade\033[0m\n";
   }
 }
 
