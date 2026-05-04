@@ -12,6 +12,15 @@
 #include "settings.h"
 
 
+//default constructor
+Road::Road()
+{
+  destination1=nullptr;
+  destination2=nullptr;
+  
+  setStartTime();
+  setTransporting(false);
+}
 //constructor
 Road::Road(Major* dest1, Major* dest2)
 {
@@ -19,13 +28,13 @@ Road::Road(Major* dest1, Major* dest2)
    * properly right away they cannot be changed. So data validation needs to happen before the road is constructed or
    * else a possibly misconstructed road could take up space in a major's road list.
    */
-  destination1=dest1;
-  destination2=dest2;
+  //the above comment was made before the destination setters were created. It may no longer be true but I am waiting to remove it until further testing
+
+  setDestination(1,dest1);
+  setDestination(2,dest2);
 
   dest1->addRoad(this);
   dest2->addRoad(this);
-
-  length=dist(dest1, dest2);
 
   setStartTime(); //set the start time
   setTransporting(false); //set the state of the road
@@ -34,6 +43,29 @@ Road::Road(Major* dest1, Major* dest2)
   //setAmount(0); //set the amount
 }
 
+//setDestinatio
+void Road::setDestination(int num, Major* destination)
+{
+  if (destination!=nullptr)
+  {
+    if (num==1)
+    {
+      destination1=destination;
+    }
+    else if (num==2)
+    {
+      destination2=destination;
+    }
+    else
+    {
+      std::cout<<"invalid index in setDestination\n";
+    }
+  }
+  else
+  {
+    std::cout<<"tried to set destination of road to nullptr\n";
+  }
+}
 //getDestination
 Major* Road::getDestination(int num)
 {

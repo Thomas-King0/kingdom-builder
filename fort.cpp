@@ -17,10 +17,6 @@ Fort::Fort(): Major()
   Major::setLimit(FORT_LIMIT); //adjust the land limit
   setVacancy(FORT_CAPACITY); //set the vacancy of the village, it starts out empty
   Major::setType(FORT); //set the type of the structure
-  for (int resource=WOOD; resource<=PRODUCE; resource+=1)
-  {
-    materials.push_back(0); //initialize the list of materials, the village starts out with none
-  }
 }
 
 //isValid
@@ -50,25 +46,6 @@ void Fort::setVacancy(int num)
   }
 }
 
-//setMaterials
-void Fort::setMaterials(Material resource, int num)
-{ //this function might need significant altering after further consideration of how materials will work
-  if (num>=0)
-  {
-    materials.at(resource)=num;
-  }
-}
-
-//getMaterials
-int Fort::getMaterials(Material resource)
-{
-  return materials.at(resource);
-}
-
-int Fort::getMaterials(int resource)
-{
-  return materials.at(static_cast<Material>(resource));
-}
 
 //trainTownsfolk
 void Fort::trainTownsfolk()

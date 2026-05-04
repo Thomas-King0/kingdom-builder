@@ -51,4 +51,9 @@
 
 //calculated constants
 
+//object id numbers for file handling
+#define LAND_ID 1
+#define BARBARIAN_ID 2
+#define MAJOR_ID 3
+#define MINOR_ID 4
 #endif

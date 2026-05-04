@@ -19,7 +19,6 @@ class Minor;
 class Fort: public Major
 {
 private:
-  std::vector<int> materials; //this vector stores how much of each material the fort has
 public:
   Fort(); //constructor
 
@@ -27,9 +26,6 @@ public:
 
   void setVacancy(int num) override; //overriden setVacancy function
 
-  void setMaterials(Material resource, int num) override; //set how much of a material a village has
-  int getMaterials(Material resource) override; //get the how much of a material a village has
-  int getMaterials(int resource) override; //get how much of a material a village has
 
   void trainTownsfolk() override; //train the trainTownsfolk
 

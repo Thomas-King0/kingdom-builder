@@ -17,10 +17,6 @@ Castle::Castle(): Major()
   Major::setLimit(CASTLE_LIMIT); //adjust the land limit
   setVacancy(CASTLE_CAPACITY); //set the vacancy of the village, it starts out empty
   Major::setType(CASTLE); //set the type of the structure
-  for (int resource=PRODUCE; resource<VACUUM; resource+=1)
-  {
-    materials.push_back(0); //initialize the list of materials, the village starts out with none
-  }
 }
 
 //isValid
@@ -48,26 +44,6 @@ void Castle::setVacancy(int num) //set the amount of space the castle has left
     std::cout<<"Tried setting the vacancy of a castle to a number ["<<num
       <<"greater than the castle capacity ["<<CASTLE_CAPACITY<<"\n";
   }
-}
-
-//setMaterials
-void Castle::setMaterials(Material resource, int num) //set the amount of materials that the castle has
-{
-  if (num>=0)
-  {
-    materials.at(resource)=num;
-  }
-}
-
-//getMaterials
-int Castle::getMaterials(Material resource)
-{
-  return materials.at(resource);
-}
-
-int Castle::getMaterials(int resource)
-{
-  return materials.at(static_cast<Material>(resource));
 }
 
 //trainTownsfolk

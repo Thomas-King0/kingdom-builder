@@ -15,7 +15,6 @@ private:
   Major* destination1; //one side of the road
   Major* destination2; //the other end of the road
 
-  double length; //distance between the two endpoints
   time_t start_time; //the time of the last transportation
 
   bool transporting; //whether the road is in use or not
@@ -23,8 +22,10 @@ private:
 
 
 public:
+  Road(); //default constructor
   Road(Major* dest1, Major* dest2); //constructor
 
+  void setDestination(int num, Major* dest);
   Major* getDestination(int num); //return the designated destination
   std::string getDestinationName(int num); //get the name of the designated destination
 

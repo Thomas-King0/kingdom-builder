@@ -12,3 +12,4 @@ test.cpp
 *.o
 *.txt
 *.sed
+*.exe

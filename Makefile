@@ -1,9 +1,9 @@
 CXX= g++
 CXXFLAGS= -Wall -Wextra
 
-OBJS=main.o land.o major.o minor.o mine.o pasture.o quarry.o sawmill.o garden.o castle.o fort.o village.o road.o caravan.o helpful.o barbarian.o menu.o
+OBJS=test.o land.o major.o minor.o mine.o pasture.o quarry.o sawmill.o garden.o castle.o fort.o village.o road.o caravan.o helpful.o barbarian.o menu.o objectWriter.o
 
-TARGET=kingdom-builder_alpha
+TARGET=object-writing
 $(TARGET): $(OBJS)
 	$(CXX) $(OBJS) -o $(TARGET)
 

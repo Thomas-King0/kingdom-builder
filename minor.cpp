@@ -21,6 +21,15 @@ Minor::Minor()
   markTime(); //mark the time so that the variable is not empty
 }
 
+//copy
+void Minor::copy(Minor* minor_ptr)
+{
+  setType(minor_ptr->getType());
+  markTime();
+  setProducing(minor_ptr->getProducing());
+  setKeep(minor_ptr->getKeep());
+}
+
 //**********************************setting/getting functions*****************************************
 
 

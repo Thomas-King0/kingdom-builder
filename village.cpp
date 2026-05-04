@@ -16,10 +16,6 @@ Village::Village(): Major()
   Major::setLimit(VILLAGE_LIMIT); //adjust the limit
   setVacancy(VILLAGE_CAPACITY); //set the vacancy of the village, it starts out empty
   Major::setType(VILLAGE); //set the type of the structure
-  for (int resource=PRODUCE; resource<VACUUM; resource+=1)
-  {
-    materials.push_back(0); //initialize the list of materials, the village starts out with none
-  }
 }
 
 //isValid
@@ -47,26 +43,6 @@ void Village::setVacancy(int num)
     std::cout<<"Tried setting the vacancy of a village to a number ["<<num
       <<"greater than the village capacity ["<<VILLAGE_CAPACITY<<"\n";
   }
-}
-
-//setMaterials
-void Village::setMaterials(Material resource, int num)
-{ //this function might need significant altering after further consideration of how materials will work
-  if (num>=0)
-  {
-    materials.at(resource)=num;
-  }
-}
-
-//getMaterials
-int Village::getMaterials(Material resource)
-{
-  return materials.at(resource);
-}
-
-int Village::getMaterials(int resource)
-{
-  return materials.at(static_cast<Material>(resource));
 }
 
 //getDefense

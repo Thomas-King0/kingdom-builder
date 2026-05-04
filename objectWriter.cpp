@@ -1,0 +1,415 @@
+//object file for class ObjectWriter
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+#include "objectWriter.h"
+#include "helpful.h"
+#include "land.h"
+#include "mine.h"
+
+
+
+//default constructor
+ObjectWriter::ObjectWriter()
+{
+  setFile(nullptr);
+}
+
+//constructor with file pointer
+ObjectWriter::ObjectWriter(std::fstream* file_ptr)
+{
+  setFile(file_ptr);
+}
+
+//setFile
+void ObjectWriter::setFile(std::fstream* file_ptr)
+{
+  file=file_ptr;
+}
+
+//getFile
+std::fstream* ObjectWriter::getFile()
+{
+  return file;
+}
+
+//write(string)
+void ObjectWriter::write(std::string str)
+{
+  std::fstream* file_ptr=getFile(); //get the file
+  int length=str.size(); //get the size of the string
+
+  file_ptr->write(reinterpret_cast<const char *>(&length), sizeof(int));
+  for (int i=0; i<length; i+=1)
+  {
+    char current=str.at(i);
+    file_ptr->write(reinterpret_cast<const char *>(&current), sizeof(char));
+  }
+}
+
+//readString
+std::string ObjectWriter::readString()
+{
+  std::fstream* file_ptr=getFile(); //get the file
+  int length;
+  std::string str;
+  file_ptr->read(reinterpret_cast<char *>(&length), sizeof(int)); //read the length of the string
+  for (int i=0; i<length; i+=1)
+  {
+    char current;
+    file_ptr->read(reinterpret_cast<char *>(&current), sizeof(char)); //read the current character
+    str=str+current;
+  }
+  return str;
+}
+
+//write (land)
+void ObjectWriter::write(Land* land_tile)
+{
+/*
+Land objects are written in the following order:
+x-position (int)
+y-position (int)
+land type (enumerated type)
+exploration status (bool)
+keep name (string)
+*/
+  //data contained in the land tile
+  int positionX=land_tile->getX(); //position of the land tile in X (c_cen)
+  int positionY=land_tile->getY(); //position of the land tile in Y (c_cen)
+  std::string keep_name;
+  Major* keep=land_tile->getKeep(); //pointer to the keep (governing structure)
+  if (keep!=nullptr)
+  {
+    keep_name=keep->getName(); //get the name of the keep
+  }
+  else
+  {
+    keep_name="";
+  }
+  Land_type type=land_tile->getType(); //what type of land it is
+  bool explored=land_tile->isExplored(); //boolean containing whether or not the tile is visible
+
+  //get the file
+  std::fstream* file_ptr=getFile();
+
+  int id=LAND_ID;
+  file_ptr->write(reinterpret_cast<const char *>(&id), sizeof(int)); //write id number
+  file_ptr->write(reinterpret_cast<const char *>(&positionX), sizeof(int)); //write x-position
+  file_ptr->write(reinterpret_cast<const char *>(&positionY), sizeof(int)); //write y-position
+  file_ptr->write(reinterpret_cast<const char *>(&type), sizeof(Land_type)); //write land type
+  file_ptr->write(reinterpret_cast<const char *>(&explored), sizeof(bool)); //write exploration status
+  write(keep_name); //write the name as a string
+}
+
+//readLand
+Land* ObjectWriter::readLand(std::string* name)
+{
+  std::fstream* file_ptr=getFile();
+  int pos_x;
+  int pos_y;
+  Land_type type;
+  bool explored;
+  file_ptr->read(reinterpret_cast< char *>(&pos_x), sizeof(int)); //read x-position
+  file_ptr->read(reinterpret_cast< char *>(&pos_y), sizeof(int)); //read y-position
+  file_ptr->read(reinterpret_cast< char *>(&type), sizeof(Land_type)); //read land type
+  file_ptr->read(reinterpret_cast< char *>(&explored), sizeof(bool)); //read exploration status
+  *name=readString(); //read the name
+
+  std::cout<<"x: "<<pos_x<<"\ny: "<<pos_y<<"\n"<<"type: "<<type<<"\n"<<(explored?"explored":"not explored")<<"\n";
+  Land* land=new Land();
+  land->setX(pos_x);
+  land->setY(pos_y);
+  land->setType(type);
+  land->setExplored(explored);
+  return land;
+}
+
+//write (barbarian)
+void ObjectWriter::write(Barbarian* tribe)
+{
+/*
+Barbarian objects are written in the following order:
+population number (int)
+keep name (string)
+*/
+  //data contained in the land tile
+  int population=tribe->getPopulation();
+  std::string keep_name;
+  Major* keep=tribe->getKeep(); //pointer to the keep (governing structure)
+  if (keep!=nullptr)
+  {
+    keep_name=keep->getName(); //get the name of the keep
+  }
+  else
+  {
+    keep_name="";
+  }
+
+  //get the file
+  std::fstream* file_ptr=getFile();
+
+  int id=BARBARIAN_ID;
+  file_ptr->write(reinterpret_cast<const char *>(&id), sizeof(int)); //write id number
+  file_ptr->write(reinterpret_cast<const char *>(&population), sizeof(int)); //write x-position
+  write(keep_name); //write the name as a string
+}
+
+//readBarbarian
+Barbarian* ObjectWriter::readBarbarian(std::string* keep_name)
+{
+  std::fstream* file_ptr=getFile();
+  int population;
+  file_ptr->read(reinterpret_cast<char *>(&population), sizeof(int)); //read the population
+  *keep_name=readString();
+  Barbarian* tribe=new Barbarian();
+  tribe->setPopulation(population);
+  return tribe;
+    
+}
+
+//write (major)
+void ObjectWriter::write(Major* major_ptr)
+{
+/*
+Major objects are  written in the following order:
+name (string)
+x-position (int)
+y-position (int)
+major type (enumerated type)
+population (vector<int>)
+vacancy (int)
+materials (vector<int>)
+
+Note: majors do not store their own position. That will be stored from the base land tile. The read function will take a pointer to a land tile and set that
+tile's position equal to the major's position. After all data has been read from memory the main program will then go through and link up all objects to their
+appropriate major.
+*/
+
+  //data contained in the major
+  std::string name=major_ptr->getName();
+  int positionX=major_ptr->getX(); //position of the major
+  int positionY=major_ptr->getY(); //position of the major
+  Major_Structure type=major_ptr->getType(); //what type of major it is
+  std::vector<int> people;
+  for (int i=FARMER; i<=TOWNSFOLK; i+=1)
+  {
+    people.push_back(major_ptr->getPopulation(static_cast<Career>(i)));
+  }
+  int vacancy=major_ptr->getVacancy();
+  std::vector<int> inventory;
+  for (int i=PRODUCE; i<VACUUM; i+=1)
+  {
+    inventory.push_back(major_ptr->getMaterials(static_cast<Material>(i)));
+  }
+
+  //get the file
+  std::fstream* file_ptr=getFile();
+
+  int id=MAJOR_ID;
+  file_ptr->write(reinterpret_cast<const char *>(&id), sizeof(int)); //write id number
+  std::cout<<"file pointer position(id): "<<file_ptr->tellg()<<"\n";
+  write(name); //write the name of the major
+  std::cout<<"file pointer position(name): "<<file_ptr->tellg()<<"\n";
+  file_ptr->write(reinterpret_cast<const char *>(&positionX), sizeof(int)); //write x-position
+  std::cout<<"file pointer position(x): "<<file_ptr->tellg()<<"\n";
+  file_ptr->write(reinterpret_cast<const char *>(&positionY), sizeof(int)); //write y-position
+  std::cout<<"file pointer position(y): "<<file_ptr->tellg()<<"\n";
+  file_ptr->write(reinterpret_cast<const char *>(&type), sizeof(Major_Structure)); //write land type
+  std::cout<<"file pointer position(type): "<<file_ptr->tellg()<<"\n";
+  int length=people.size();
+  std::cout<<"population vector size in write: "<<length<<"\n";
+  file_ptr->write(reinterpret_cast<const char *>(&length), sizeof(int)); //the length of the vector (technically known but this seems like good practice)
+  std::cout<<"file pointer position(population length): "<<file_ptr->tellg()<<"\n";
+  for (int i=0; i<length; i+=1)
+  {
+    int current=people.at(i);
+    file_ptr->write(reinterpret_cast<const char *>(&current), sizeof(int)); //write the population data
+  std::cout<<"file pointer position(population["<<i<<"]: "<<file_ptr->tellg()<<"\n";
+  }
+  file_ptr->write(reinterpret_cast<const char *>(&vacancy), sizeof(int)); //write the vacancy
+  std::cout<<"file pointer position(vacancy): "<<file_ptr->tellg()<<"\n";
+  length=inventory.size();
+  std::cout<<"materials vector size in write: "<<length<<"\n";
+  file_ptr->write(reinterpret_cast<const char *>(&length), sizeof(int)); //the length of the vector (again)
+  std::cout<<"file pointer position(materials length): "<<file_ptr->tellg()<<"\n";
+  for (int i=0; i<length; i+=1)
+  {
+    int current=inventory.at(i);
+    file_ptr->write(reinterpret_cast<const char *>(&current), sizeof(int)); //write the population data
+  std::cout<<"file pointer position(materials["<<i<<"]: "<<file_ptr->tellg()<<"\n";
+  }
+}
+
+//readMajor
+Major* ObjectWriter::readMajor(Land* land_ptr)
+{
+  //data contained in the major
+  std::string name;
+  int positionX;
+  int positionY;
+  Major_Structure type; //what type of major it is
+  std::vector<int> people;
+  int vacancy;
+  std::vector<int> inventory;
+
+  //get the file
+  std::fstream* file_ptr=getFile();
+
+  std::cout<<"file pointer position1: "<<file_ptr->tellg()<<"\n";
+  name=readString(); //write the name of the major
+  std::cout<<"file pointer position2: "<<file_ptr->tellg()<<"\n";
+  file_ptr->read(reinterpret_cast<char *>(&positionX), sizeof(int)); //write x-position
+  std::cout<<"file pointer position3: "<<file_ptr->tellg()<<"\n";
+  file_ptr->read(reinterpret_cast<char *>(&positionY), sizeof(int)); //write y-position
+  std::cout<<"file pointer position4: "<<file_ptr->tellg()<<"\n";
+  std::cout<<"\tsize of a Major_Structure: "<<sizeof(Major_Structure)<<"\n";
+  file_ptr->read(reinterpret_cast<char *>(&type), sizeof(Major_Structure)); //write land type
+  //reading the major type might be sketchy right now. This is a candidate for the issue
+  std::cout<<"file pointer position5: "<<file_ptr->tellg()<<"\n";
+  int length;
+  file_ptr->read(reinterpret_cast<char *>(&length), sizeof(int)); //the length of the vector (technically known but this seems like good practice)
+  std::cout<<"\tlength of population vector: "<<length<<"\n";
+  std::cout<<"file pointer position06: "<<file_ptr->tellg()<<"\n";
+  for (int i=0; i<length; i+=1)
+  {
+    int current;
+    file_ptr->read(reinterpret_cast<char *>(&current), sizeof(int)); //write the population data
+  std::cout<<"file pointer position6: "<<file_ptr->tellg()<<"\n";
+    people.push_back(current);
+  }
+  //std::cout<<"file pointer position7: "<<file_ptr->tellg()<<"\n";
+  file_ptr->read(reinterpret_cast<char *>(&vacancy), sizeof(int)); //write the vacancy
+  std::cout<<"file pointer position8: "<<file_ptr->tellg()<<"\n";
+  file_ptr->read(reinterpret_cast<char *>(&length), sizeof(int)); //the length of the vector (again)
+  std::cout<<"\tlength of materials vector: "<<length<<"\n";
+  for (int i=0; i<length; i+=1)
+  {
+    int current;
+    file_ptr->read(reinterpret_cast<char *>(&current), sizeof(int)); //write the population data
+  std::cout<<"file pointer position9: "<<file_ptr->tellg()<<"\n";
+    inventory.push_back(current);
+  }
+  std::cout<<"file pointer position10: "<<file_ptr->tellg()<<"\n";
+
+  //create new major
+  Major* major_ptr=new Major();
+  major_ptr->setName(name);
+  major_ptr->setType(type);
+  for (int i=FARMER; i<=TOWNSFOLK; i+=1)
+  {
+    int current=people.at(i);
+    major_ptr->setPopulation(static_cast<Career>(i), current);
+  }
+  major_ptr->setVacancy(vacancy);
+  for (int i=PRODUCE; i<VACUUM; i+=1)
+  {
+    int current=inventory.at(i);
+    major_ptr->setMaterials(static_cast<Material>(i), current);
+  }
+  land_ptr->setX(positionX);
+  land_ptr->setY(positionY);
+
+  return major_ptr;
+}
+
+//write (minor)
+void ObjectWriter::write(Minor* minor_ptr)
+{
+  /*
+  minors are written in the following order:
+  type (enumerated)
+  //time (time_t) //actually I may not write this since I don't have a function to set the start time to whatever I want
+                  //Also I like the idea that if you save in the middle of production then the production has to start over
+  production status (bool)
+  keep name (string) 
+  */
+
+  //get minor data
+  Minor_Structure type=minor_ptr->getType();
+  //time_t start=minor_ptr->getTime();
+  bool producing=minor_ptr->getProducing();
+  std::string name=minor_ptr->getKeep()->getName();
+
+  //get file writer
+  std::fstream* file_ptr=getFile();
+
+  int id=MINOR_ID;
+
+  file_ptr->write(reinterpret_cast<const char*>(&id), sizeof(int)); //write the id number
+  file_ptr->write(reinterpret_cast<const char*>(&type), sizeof(Minor_Structure)); //write the minor type
+  //file_ptr->write(reinterpret_cast<const char*>(&start), sizeof(time_t)); //write the time since last production
+  file_ptr->write(reinterpret_cast<const char*>(&producing), sizeof(bool)); //write the production status
+  write(name); //write the name of the keep
+}
+
+//readMinor
+Minor* ObjectWriter::readMinor(std::string* keep_name)
+{
+  //minor data
+  Minor_Structure type;
+  //time_t start;
+  bool producing;
+  
+  std::fstream* file_ptr=getFile();
+
+  //read data
+  file_ptr->read(reinterpret_cast<char *>(&type), sizeof(Minor_Structure)); //read the type
+  //file_ptr->read(reinterpret_cast<char *>(&start), sizeof(time_t)); //read the type
+  file_ptr->read(reinterpret_cast<char *>(&producing), sizeof(bool)); //read the type
+  *keep_name=readString();
+
+  //initialize new minor
+  Minor* minor_ptr=new Mine(); //mine is used because I just need a non-abstract type to initialize it as
+  minor_ptr->setType(type);
+  minor_ptr->setProducing(producing);
+
+  return minor_ptr;  
+}
+
+//write (road)
+void ObjectWriter::write(Road* road_ptr)
+{
+/*
+Roads will be written in the following order
+destination1 (string)
+destination2 (string)
+transportation status (bool)
+*/
+
+  //get data from road
+  std::string dest1=road_ptr->getDestinationName(1);
+  std::string dest2=road_ptr->getDestinationName(2);
+  bool transporting=road_ptr->isTransporting();
+
+  //get file pointer
+  std::fstream* file_ptr=getFile();
+
+  //write data
+  write(dest1); //first destination name
+  write(dest2); //second destination name
+  file_ptr->write(reinterpret_cast<const char *>(&transporting),sizeof(bool)); //transportation status
+}
+
+//readRoad
+Road* ObjectWriter::readRoad(std::string* dest1, std::string* dest2);
+{
+  bool transporting;
+
+  //get file pointer
+  std::fstream* file_ptr=getFile();
+
+  //read data
+  *dest1=readString(); //first destination
+  *dest2=readString(); //second destination
+  file_ptr->read(reinterpret_cast<char *>(&transporting), sizeof(bool)); //transportation status
+
+  //initialize road
+  Road* road_ptr=new Road();
+  road_ptr->setTransporting(transporting);
+  return road_ptr;
+}
+//write (caravan)
+void ObjectWriter::write()
