@@ -8,6 +8,14 @@
 #include <string>
 
 //constructor
+Caravan::Caravan()
+{
+  setDestination(nullptr);
+  setContents(1);
+  setAmount(0);
+  setIsMaterials(false);
+}
+
 Caravan::Caravan(Major* destination_ptr)
 {
   setDestination(destination_ptr);
@@ -123,14 +131,11 @@ int Caravan::getContents()
 void Caravan::setContents(int num)
 {
   /*set max according to if the caravan is carrying people or materials
-  * max for people: 5
-  * max for materials: 4
-  * these are due to the number of elements in the enumeration for both
   */
   int max;
   if (isMaterials()) //ensure that the index referring to the contents is a valid index
   {
-    max=static_cast<int>(VACUUM)-1; //the minnus 1 is because vacuum is not a material the player can actually have
+    max=static_cast<int>(VACUUM)-1; //the minus 1 is because vacuum is not a material the player can actually have
   }
   else
   {
@@ -143,7 +148,7 @@ void Caravan::setContents(int num)
   }
   else if (num>max) //make sure it is less than the max
   {
-    std::cout<<"tried to set an amount that is greater than max["<<max<<"] in set contents\n";
+    std::cout<<"tried to set an amount["<<num<<"] that is greater than max["<<max<<"] in Caravan::setContents\n";
   }
   else
   {

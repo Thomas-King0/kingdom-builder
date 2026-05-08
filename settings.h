@@ -56,4 +56,6 @@
 #define BARBARIAN_ID 2
 #define MAJOR_ID 3
 #define MINOR_ID 4
+#define ROAD_ID 5
+#define CARAVAN_ID 6
 #endif

@@ -8,12 +8,13 @@
 #include <fstream>
 #include <string>
 
-#include "helpful.h"
-#include "land.h"
-#include "major.h"
-#include "minor.h"
-#include "barbarian.h"
-#include "settings.h"
+class Land;
+class Major;
+class Minor;
+class Road;
+class Caravan;
+class Barbarian;
+
 
 /*
 Object id numbers:
@@ -22,6 +23,7 @@ Object id numbers:
 3. major
 4. minor
 5. road
+6. caravan
 */
 
 class ObjectWriter
@@ -58,12 +60,10 @@ public:
 
   //road file functions
   void write(Road* road_ptr); //write a road to save
-  Road* readRoad(std::string* dest1, std::string* dest2); //read road data
+  Road* readRoad(std::string* dest1, std::string* dest2, std::string* caravan_dest); //read road data
 
-/*
   //caravan file functions
-  void write(Road* road_ptr); //write a caravan to save (via a road)
-  Caravan* readCaravan(std::string* origin, std::string* dest); //read a caravan from memory
-*/
+  void write(Caravan* caravan_ptr); //write a caravan to save 
+  Caravan* readCaravan(std::string* destination_name); //read a caravan from memory
 };
 #endif

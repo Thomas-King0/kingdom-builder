@@ -7,8 +7,13 @@
 #include "objectWriter.h"
 #include "helpful.h"
 #include "land.h"
+#include "major.h"
+#include "minor.h"
+#include "road.h"
+#include "caravan.h"
+#include "barbarian.h"
 #include "mine.h"
-
+#include "settings.h"
 
 
 //default constructor
@@ -377,26 +382,35 @@ Roads will be written in the following order
 destination1 (string)
 destination2 (string)
 transportation status (bool)
+caravan (caravan) [if applicable]
 */
 
   //get data from road
   std::string dest1=road_ptr->getDestinationName(1);
   std::string dest2=road_ptr->getDestinationName(2);
   bool transporting=road_ptr->isTransporting();
+  Caravan* caravan_ptr=road_ptr->getCaravan();
 
   //get file pointer
   std::fstream* file_ptr=getFile();
 
+  int id=ROAD_ID;
   //write data
+  file_ptr->write(reinterpret_cast<const char *>(&id), sizeof(int)); //write the id
   write(dest1); //first destination name
   write(dest2); //second destination name
   file_ptr->write(reinterpret_cast<const char *>(&transporting),sizeof(bool)); //transportation status
+  if (caravan_ptr!=nullptr) //do not write the caravan if there is nothing to write
+  {
+    write(caravan_ptr);
+  }
 }
 
 //readRoad
-Road* ObjectWriter::readRoad(std::string* dest1, std::string* dest2);
+Road* ObjectWriter::readRoad(std::string* dest1, std::string* dest2, std::string* caravan_dest)
 {
   bool transporting;
+  Caravan* caravan_ptr=nullptr;
 
   //get file pointer
   std::fstream* file_ptr=getFile();
@@ -405,11 +419,87 @@ Road* ObjectWriter::readRoad(std::string* dest1, std::string* dest2);
   *dest1=readString(); //first destination
   *dest2=readString(); //second destination
   file_ptr->read(reinterpret_cast<char *>(&transporting), sizeof(bool)); //transportation status
+  if (transporting)
+  {
+    std::cout<<"reading caravan\n";
+    int data_id;
+    file_ptr->read(reinterpret_cast<char *>(&data_id), sizeof(int)); //read the caravan id
+    if (data_id!=CARAVAN_ID)
+    {
+      std::cout<<"error reading caravan in readRoad\n";
+    }
+    else
+    {
+      caravan_ptr=readCaravan(caravan_dest); 
+    }
+  } 
 
   //initialize road
   Road* road_ptr=new Road();
   road_ptr->setTransporting(transporting);
+  std::cout<<"setting caravan\n";
+  road_ptr->setCaravan(caravan_ptr);
   return road_ptr;
 }
 //write (caravan)
-void ObjectWriter::write()
+void ObjectWriter::write(Caravan* caravan_ptr)
+{
+/*
+Caravans will be written in the following way:
+substance [materials or people] (bool)
+type (int)
+amount (int)
+destination (string)
+*/
+
+  //get data from caravan
+  bool isMaterials=caravan_ptr->isMaterials();
+  int contents=caravan_ptr->getContents();
+  int amount=caravan_ptr->getAmount();
+  std::string destination=caravan_ptr->getDestination()->getName();
+
+  //get the file pointer
+  std::fstream* file_ptr=getFile();
+
+  int id=CARAVAN_ID;
+  //write the data
+  file_ptr->write(reinterpret_cast<const char *>(&id), sizeof(int)); //write the id number
+  file_ptr->write(reinterpret_cast<const char *>(&isMaterials), sizeof(bool)); //write the substance
+  file_ptr->write(reinterpret_cast<const char *>(&contents), sizeof(int)); //write the contents
+  file_ptr->write(reinterpret_cast<const char *>(&amount), sizeof(int)); //write the amount
+  write(destination);
+}
+
+//readCaravan
+Caravan* ObjectWriter::readCaravan(std::string* destination_name)
+{
+  //get data from caravan
+  bool isMaterials;
+  int contents;
+  int amount;
+
+  //get the file pointer
+  std::fstream* file_ptr=getFile();
+
+  int id;
+  //read the data
+/*
+  file_ptr->read(reinterpret_cast<char *>(&id), sizeof(int)); //read the id number
+  if (id!=CARAVAN_ID)
+  {
+    std::cout<<"error in reading caravan: incorrect id number\n";
+    return nullptr;
+  }
+*/
+
+  file_ptr->read(reinterpret_cast<char *>(&isMaterials), sizeof(bool)); //read the substance
+  file_ptr->read(reinterpret_cast<char *>(&contents), sizeof(int)); //read the contents
+  file_ptr->read(reinterpret_cast<char *>(&amount), sizeof(int)); //read the amount
+  *destination_name=readString();  
+
+  Caravan* caravan_ptr=new Caravan();
+  caravan_ptr->setIsMaterials(isMaterials);
+  caravan_ptr->setContents(contents);
+  caravan_ptr->setAmount(amount);
+  return caravan_ptr;
+}
