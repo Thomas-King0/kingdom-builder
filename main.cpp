@@ -3,6 +3,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <ctime>
@@ -23,6 +24,7 @@
 #include "helpful.h"
 #include "settings.h"
 #include "menu.h"
+#include "objectWriter.h"
 
 using namespace std;
 
@@ -30,33 +32,20 @@ using namespace std;
 
 int main(void)
 {
+  /*
+  Game information:
+  save name
+  wins (number of times the barbarians have been expelled
+  */
+  string save_name; //the name of the current save
   //seed the random number generation
   srand(37);
 
-  //Land objects
+  //initialize data vectors
   vector <Land> test_land;
-  for (int i=0; i<power((2*MAP_SIZE+1),2) ;i+=1)
-  {
-    test_land.push_back(Land());
-  }
-  //int land_found=1; //initilaize to 1, because 1 tile starts out explored
-
-  test_land[pos2index(MAP_SIZE,MAP_SIZE)].setType(FOREST);
-  test_land[pos2index(MAP_SIZE, MAP_SIZE)].setX(MAP_SIZE); //MAP_SIZE:c_cen=0:p_cen
-  test_land[pos2index(MAP_SIZE, MAP_SIZE)].setY(MAP_SIZE); //see above
-
-  //structure list
-  std::cout<<"first you need to choose a name for your starting castle\n";
   vector <Major*> structure_list;
-  structure_list.push_back(new Castle());
-
-  //roads
   vector <Road*> highway;
-
-  //Mines objects
   vector <Minor*> minor_list;
-
-  //barbarian tribes
   vector<Barbarian*> tribes;
   bool barbarian_invasion=false; //store whether there are currently any barbarians in the kingdom
   //Village steppes=Village(); //give the barbarians a beginning structure tile to start from
@@ -65,21 +54,73 @@ int main(void)
   bool spread=false;
   int wins=0;
 
+  //start menu
+  Menu start_menu=Menu("Welcome to LTKingdom!");
+  start_menu.addOption("new game");
+  start_menu.addOption("load game");
+  int option;
+  start_menu.display();
+  option=*start_menu.getChoice();
 
-  structure_list[0]->setBase(&test_land[pos2index(MAP_SIZE,MAP_SIZE)]);
-  structure_list[0]->setPopulation(TOWNSFOLK,VILLAGE_CAPACITY*2 ); //50); this is just a test
-  structure_list[0]->setMaterials(WOOD, 100);
-  structure_list[0]->setMaterials(ANIMALS, 100);
-  structure_list[0]->setMaterials(METAL, 50);
-  structure_list[0]->setMaterials(STONE, 100);
-  structure_list[0]->setMaterials(PRODUCE, 200);
-  structure_list[0]->changeName();
+  switch (option)
+  {
+    case (1): //new game
+    {
+      cout<<"What do you want to name this save: ";
+      getName(&save_name);
+      fstream file;
+      file.open((save_name+".bin"), ios::out | ios::binary);
+      if (!file)
+      {
+        cout<<"error in creating "<<save_name<<".bin\n";
+        return 1;
+      }
+      file.close();
 
-  //structure_list[1]->setBase(&test_land[pos2index(MAP_SIZE+3, MAP_SIZE)]);
+      //Land objects
+      for (int i=0; i<power((2*MAP_SIZE+1),2) ;i+=1)
+      {
+        test_land.push_back(Land());
+      }
+      //int land_found=1; //initilaize to 1, because 1 tile starts out explored
+    
+      test_land[pos2index(MAP_SIZE,MAP_SIZE)].setType(FOREST);
+      test_land[pos2index(MAP_SIZE, MAP_SIZE)].setX(MAP_SIZE); //MAP_SIZE:c_cen=0:p_cen
+      test_land[pos2index(MAP_SIZE, MAP_SIZE)].setY(MAP_SIZE); //see above
+    
+      //structure list
+      std::cout<<"first you need to choose a name for your starting castle\n";
+      structure_list.push_back(new Castle());
+
+      //roads
+
+      //Mines objects
+
+      //barbarian tribes
+
+      //set values of starting castle
+      structure_list[0]->setBase(&test_land[pos2index(MAP_SIZE,MAP_SIZE)]);
+      structure_list[0]->setPopulation(TOWNSFOLK,VILLAGE_CAPACITY*2 ); //50); this is just a test
+      structure_list[0]->setMaterials(WOOD, 100);
+      structure_list[0]->setMaterials(ANIMALS, 100);
+      structure_list[0]->setMaterials(METAL, 50);
+      structure_list[0]->setMaterials(STONE, 100);
+      structure_list[0]->setMaterials(PRODUCE, 200);
+      structure_list[0]->changeName();
+    
+      //structure_list[1]->setBase(&test_land[pos2index(MAP_SIZE+3, MAP_SIZE)]);
+      break;
+    }
+    case (2): //load game
+    {
+      break;
+    }
+  }
+
 
   //menus
   vector<string> action_options={"produce", "build", "train townsfolk", "display data", "display map", "explore", "claim land", "list structure",
-    "transport cargo", "wait", "attack", "rename a structure", "quit"};
+    "transport cargo", "wait", "attack", "rename a structure", "save", "quit"};
   Menu action_menu=Menu("Choose an action", action_options);
   action_menu.setColor(105);
 
@@ -883,7 +924,54 @@ int main(void)
         }
         break;
       }
-      case (13): //quit
+      case (13): //save
+      {
+        //open file
+        fstream file_writer;
+        file_writer.open((save_name+".bin"), ios::in | ios::out | ios::binary);
+        ObjectWriter writer=ObjectWriter(&file_writer);
+
+        //write game information
+        file_writer.write(reinterpret_cast<const char*>(&wins), sizeof(int));
+
+        //write land data
+        for (int i=0; i<test_land.size(); i+=1)
+        {
+          Land current=test_land.at(i);
+          if (current.getType()!=SPACE) //only write a land tile if it has been explored, this reduces the size of the save file
+          {
+            writer.write(&current);
+          }
+        }
+
+        //write major structures
+        for (int i=0; i<structure_list.size(); i+=1)
+        {
+          writer.write(structure_list.at(i));
+        }
+
+        //write minor structures
+        for (int i=0; i<minor_list.size(); i+=1)
+        {
+          writer.write(structure_list.at(i));
+        }
+
+        //write roads
+        for (int i=0; i<highway.size(); i+=1)
+        {
+          writer.write(highway.at(i));
+        }
+
+        //write barbarians
+        for (int i=0; i<tribes.size(); i+=1)
+        {
+          writer.write(tribes.at(i));
+        }
+        
+        file_writer.close();
+        break;
+      }
+      case (14): //quit
       {
         cont=false;
         break;
@@ -1039,7 +1127,7 @@ int main(void)
       }
       spread=false;
     }
-//********************************************check for end of game**************************************************
+    //********************************************check for end of game**************************************************
     if (wins==3)
     {
       cout<<"\033[1;32mCongratulations! You won!\033[0m You fended off the barbarian hordes three times, showing that your"

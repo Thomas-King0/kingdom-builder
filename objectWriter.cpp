@@ -215,36 +215,24 @@ appropriate major.
 
   int id=MAJOR_ID;
   file_ptr->write(reinterpret_cast<const char *>(&id), sizeof(int)); //write id number
-  std::cout<<"file pointer position(id): "<<file_ptr->tellg()<<"\n";
   write(name); //write the name of the major
-  std::cout<<"file pointer position(name): "<<file_ptr->tellg()<<"\n";
   file_ptr->write(reinterpret_cast<const char *>(&positionX), sizeof(int)); //write x-position
-  std::cout<<"file pointer position(x): "<<file_ptr->tellg()<<"\n";
   file_ptr->write(reinterpret_cast<const char *>(&positionY), sizeof(int)); //write y-position
-  std::cout<<"file pointer position(y): "<<file_ptr->tellg()<<"\n";
   file_ptr->write(reinterpret_cast<const char *>(&type), sizeof(Major_Structure)); //write land type
-  std::cout<<"file pointer position(type): "<<file_ptr->tellg()<<"\n";
   int length=people.size();
-  std::cout<<"population vector size in write: "<<length<<"\n";
   file_ptr->write(reinterpret_cast<const char *>(&length), sizeof(int)); //the length of the vector (technically known but this seems like good practice)
-  std::cout<<"file pointer position(population length): "<<file_ptr->tellg()<<"\n";
   for (int i=0; i<length; i+=1)
   {
     int current=people.at(i);
     file_ptr->write(reinterpret_cast<const char *>(&current), sizeof(int)); //write the population data
-  std::cout<<"file pointer position(population["<<i<<"]: "<<file_ptr->tellg()<<"\n";
   }
   file_ptr->write(reinterpret_cast<const char *>(&vacancy), sizeof(int)); //write the vacancy
-  std::cout<<"file pointer position(vacancy): "<<file_ptr->tellg()<<"\n";
   length=inventory.size();
-  std::cout<<"materials vector size in write: "<<length<<"\n";
   file_ptr->write(reinterpret_cast<const char *>(&length), sizeof(int)); //the length of the vector (again)
-  std::cout<<"file pointer position(materials length): "<<file_ptr->tellg()<<"\n";
   for (int i=0; i<length; i+=1)
   {
     int current=inventory.at(i);
     file_ptr->write(reinterpret_cast<const char *>(&current), sizeof(int)); //write the population data
-  std::cout<<"file pointer position(materials["<<i<<"]: "<<file_ptr->tellg()<<"\n";
   }
 }
 
@@ -263,41 +251,27 @@ Major* ObjectWriter::readMajor(Land* land_ptr)
   //get the file
   std::fstream* file_ptr=getFile();
 
-  std::cout<<"file pointer position1: "<<file_ptr->tellg()<<"\n";
   name=readString(); //write the name of the major
-  std::cout<<"file pointer position2: "<<file_ptr->tellg()<<"\n";
   file_ptr->read(reinterpret_cast<char *>(&positionX), sizeof(int)); //write x-position
-  std::cout<<"file pointer position3: "<<file_ptr->tellg()<<"\n";
   file_ptr->read(reinterpret_cast<char *>(&positionY), sizeof(int)); //write y-position
-  std::cout<<"file pointer position4: "<<file_ptr->tellg()<<"\n";
-  std::cout<<"\tsize of a Major_Structure: "<<sizeof(Major_Structure)<<"\n";
   file_ptr->read(reinterpret_cast<char *>(&type), sizeof(Major_Structure)); //write land type
-  //reading the major type might be sketchy right now. This is a candidate for the issue
-  std::cout<<"file pointer position5: "<<file_ptr->tellg()<<"\n";
   int length;
   file_ptr->read(reinterpret_cast<char *>(&length), sizeof(int)); //the length of the vector (technically known but this seems like good practice)
-  std::cout<<"\tlength of population vector: "<<length<<"\n";
-  std::cout<<"file pointer position06: "<<file_ptr->tellg()<<"\n";
   for (int i=0; i<length; i+=1)
   {
     int current;
     file_ptr->read(reinterpret_cast<char *>(&current), sizeof(int)); //write the population data
-  std::cout<<"file pointer position6: "<<file_ptr->tellg()<<"\n";
     people.push_back(current);
   }
   //std::cout<<"file pointer position7: "<<file_ptr->tellg()<<"\n";
   file_ptr->read(reinterpret_cast<char *>(&vacancy), sizeof(int)); //write the vacancy
-  std::cout<<"file pointer position8: "<<file_ptr->tellg()<<"\n";
   file_ptr->read(reinterpret_cast<char *>(&length), sizeof(int)); //the length of the vector (again)
-  std::cout<<"\tlength of materials vector: "<<length<<"\n";
   for (int i=0; i<length; i+=1)
   {
     int current;
     file_ptr->read(reinterpret_cast<char *>(&current), sizeof(int)); //write the population data
-  std::cout<<"file pointer position9: "<<file_ptr->tellg()<<"\n";
     inventory.push_back(current);
   }
-  std::cout<<"file pointer position10: "<<file_ptr->tellg()<<"\n";
 
   //create new major
   Major* major_ptr=new Major();

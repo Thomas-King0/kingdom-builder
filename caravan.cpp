@@ -142,7 +142,7 @@ void Caravan::setContents(int num)
     max=static_cast<int>(TOWNSFOLK); //here no minus 1 is needed because a townsfolk is a valid type of person
   }
 
-  if (num<0) //make sure num is greater than 0
+  if (num<0) //make sure num is not less than 0
   {
     std::cout<<"tried to set an amount that is less than 0 in setContents\n";
   }
