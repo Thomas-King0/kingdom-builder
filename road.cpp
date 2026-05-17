@@ -17,6 +17,7 @@ Road::Road()
 {
   destination1=nullptr;
   destination2=nullptr;
+  setCaravan(nullptr);
   
   setStartTime();
   setTransporting(false);
@@ -32,6 +33,8 @@ Road::Road(Major* dest1, Major* dest2)
 
   setDestination(1,dest1);
   setDestination(2,dest2);
+
+  setCaravan(nullptr);
 
   dest1->addRoad(this);
   dest2->addRoad(this);

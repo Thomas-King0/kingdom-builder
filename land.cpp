@@ -25,7 +25,7 @@ Land::Land() //defualt constructor
   setType(SPACE);
 
   //set the visibility
-  setExplored(false);
+  //setExplored(false);
 }
 
 
@@ -183,16 +183,25 @@ std::string Land::getTypeString() //get the land type as a string
 
 //********************visiblity functions*****************************
 
+/*
 //setVisible
 void Land::setExplored(bool tf)
 {
   explored=tf;
 }
+*/
 
 //isVisible
 bool Land::isExplored()
 {
-  return explored;
+  if (getType()!=SPACE)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 //************************other functions***********************************

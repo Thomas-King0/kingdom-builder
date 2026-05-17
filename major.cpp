@@ -258,6 +258,12 @@ bool Major::canClaim(Land* potential)
   return false;
 }
 
+void Major::forceClaim(Land* land_ptr)
+{
+  claimed.push_back(land_ptr); //add the claim to the major's list
+  land_ptr->setKeep(this); //set the major as the keep of the tile
+}
+
 //setLimit
 void Major::setLimit(int num) //set the limit of the structure
 {

@@ -43,6 +43,10 @@ int main(void)
 
   //initialize data vectors
   vector <Land> test_land;
+  for (int i=0; i<power((2*MAP_SIZE+1),2) ;i+=1)
+  {
+    test_land.push_back(Land());
+  }
   vector <Major*> structure_list;
   vector <Road*> highway;
   vector <Minor*> minor_list;
@@ -78,10 +82,6 @@ int main(void)
       file.close();
 
       //Land objects
-      for (int i=0; i<power((2*MAP_SIZE+1),2) ;i+=1)
-      {
-        test_land.push_back(Land());
-      }
       //int land_found=1; //initilaize to 1, because 1 tile starts out explored
     
       test_land[pos2index(MAP_SIZE,MAP_SIZE)].setType(FOREST);
@@ -113,6 +113,181 @@ int main(void)
     }
     case (2): //load game
     {
+      cout<<"Please enter name of save: ";
+      getName(&save_name);
+      fstream file;
+      string file_name=(save_name+".bin");
+      cout<<"opening "<<file_name<<"\n";
+      file.open(file_name, ios::in | ios::binary);
+      if (!file)
+      {
+        cout<<"error in opening "<<save_name<<".bin\n";
+        return 1;
+      }
+      ObjectWriter writer=ObjectWriter(&file); //initialize the object writer
+
+      //object reading loop
+      file.seekg(0, ios::end); //put the pointer at the end
+      streampos file_size=file.tellg(); //read the file size
+      file.seekg(0, ios::beg); //put the pointer back to the beginning
+
+      vector<string> land_keeps; //store the name of each land tile's keep
+      vector<int> land_id; //store the index of that tile
+
+      file.read(reinterpret_cast<char *>(&wins), sizeof(int)); //read the number of wins
+      while (file.tellg()<file_size)
+      {
+        int id_num; //initialize the id number
+        file.read(reinterpret_cast<char *>(&id_num), sizeof(int)); //read the id number
+        switch (id_num)
+        {
+          case (LAND_ID): //land
+          {
+            string keep_name;
+            Land* land_ptr=writer.readLand(&keep_name);
+            //copy all data from the pointer to the appropriate land tile
+            int index=pos2index(land_ptr->getX(), land_ptr->getY()); //get the index of the tile
+            //test_land.at(index).setExplored(true);
+            test_land.at(index).setX(land_ptr->getX());
+            test_land.at(index).setY(land_ptr->getY());
+            test_land.at(index).setType(land_ptr->getType()); //set the type
+            //cout<<"index of "<<keep_name<<": "<<land_keeps.size()<<"\n";
+            if (keep_name!="")
+            {
+              land_keeps.push_back(keep_name); //store the keep name
+              land_id.push_back(index); //store the index of the land
+              //the index needs to be stored so that the program can find the right land tile later
+            }
+            break;
+          }
+          case (MAJOR_ID): //major
+          {
+            Land* base_ptr=new Land();
+            Major* major_ptr=writer.readMajor(base_ptr); //read the major
+            //structure_list.push_back(writer.readMajor(base_ptr)); //read the major
+            
+            int index=pos2index(base_ptr->getX(), base_ptr->getY()); //get the index of the base
+            major_ptr->setBase(&test_land.at(index)); //set the base tile
+            //set land limit
+            switch (major_ptr->getType())
+            {
+              case (CASTLE):
+              {
+                major_ptr->setLimit(CASTLE_LIMIT);
+                break;
+              }
+              case (VILLAGE):
+              {
+                major_ptr->setLimit(VILLAGE_LIMIT);
+                break;
+              }
+              case (FORT):
+              {
+                major_ptr->setLimit(FORT_LIMIT);
+                break;
+              }
+              default:
+              {
+                major_ptr->setLimit(0);
+                break;
+              }
+            }
+            structure_list.push_back(major_ptr); //push the pointer into the vector
+            delete base_ptr; //delete the extra land pointer
+            break;
+          }
+          case (MINOR_ID):
+          {
+            string keep_name;
+            Minor* minor_ptr=writer.readMinor(&keep_name);
+            Major* major_ptr=getStructure(keep_name, &structure_list); //get the major structure
+            minor_ptr->setKeep(major_ptr); //set the keep for the minor
+            major_ptr->addSupport(minor_ptr); //add the support to the major
+            //the minor's keep is set first so that the major adds the support with no checks
+            minor_list.push_back(minor_ptr); //add the minor to the list
+            break;
+          }
+          case (ROAD_ID):
+          {
+            string dest1;
+            string dest2;
+            string caravan_dest;
+            //caravan_ptr=obj_writ.readRoad(&dest1, &dest2, &caravan_dest);
+            //cout<<caravan_ptr->getData()<<"\n";
+            //cout<<"destination: "<<caravan_dest<<"\n";
+            Road saved_road;
+            Road* road_ptr=writer.readRoad(&dest1, &dest2, &caravan_dest);
+            Caravan* caravan_ptr=road_ptr->getCaravan(); //get the caravan
+            //set the caravan destination
+            Major* destination_ptr=getStructure(caravan_dest, &structure_list);
+            if (destination_ptr!=nullptr)
+            {
+              caravan_ptr->setDestination(destination_ptr);
+            }
+
+            //set the road endpoints
+            Major* endpoint1=getStructure(dest1, &structure_list);
+            if (endpoint1!=nullptr)
+            {
+              road_ptr->setDestination(1,endpoint1);
+            }
+            endpoint1->addRoad(road_ptr);
+
+            Major* endpoint2=getStructure(dest2, &structure_list);
+            if (endpoint2!=nullptr)
+            {
+              road_ptr->setDestination(2,endpoint2);
+            }
+            endpoint2->addRoad(road_ptr);
+
+            highway.push_back(road_ptr);
+            break;
+          }
+          case (BARBARIAN_ID):
+          {
+            string keep_name;
+            Barbarian* barbarian_ptr=writer.readBarbarian(&keep_name);
+            Major* major_ptr=getStructure(keep_name, &structure_list); //get the major structure
+            barbarian_ptr->setKeep(major_ptr); //set the keep for the minor
+            tribes.push_back(barbarian_ptr);
+            break;
+          }
+          default:
+          {
+            cout<<"unkown id number while reading saved data\n";
+            cout<<"number read: "<<id_num<<"\n";
+            break;
+          }
+        }
+      }
+      //link up the land tiles to their respective keeps
+      for (int i=0; i<land_keeps.size(); i+=1)
+      {
+        int index=land_id.at(i); //get the index
+        Land* land_ptr=&(test_land.at(index));
+        if (land_ptr->getKeep()==nullptr)
+        {
+          string name=land_keeps.at(i); //get the name
+          Major* major_ptr=getStructure(name, &structure_list); //get the major structure
+          major_ptr->forceClaim(land_ptr);
+        }
+      }
+      //display all data
+      //cout<<"displaying majors data\n";
+      /*
+      for (int i=0; i<structure_list.size(); i+=1)
+      {
+        cout<<structure_list.at(i)->getData()<<"\n";
+      }
+      cout<<"displaying land data\n";
+      for (int i=0; i<test_land.size(); i+=1)
+      {
+        if (test_land.at(i).getType()!=SPACE)
+        {
+          cout<<test_land.at(i).getData()<<"\n";
+        }
+      }
+      */
       break;
     }
   }
@@ -120,7 +295,7 @@ int main(void)
 
   //menus
   vector<string> action_options={"produce", "build", "train townsfolk", "display data", "display map", "explore", "claim land", "list structure",
-    "transport cargo", "wait", "attack", "rename a structure", "save", "quit"};
+    "transport cargo", "wait", "attack", "rename a structure", "save", "quit", "start attack"};
   Menu action_menu=Menu("Choose an action", action_options);
   action_menu.setColor(105);
 
@@ -928,7 +1103,7 @@ int main(void)
       {
         //open file
         fstream file_writer;
-        file_writer.open((save_name+".bin"), ios::in | ios::out | ios::binary);
+        file_writer.open((save_name+".bin"), ios::out | ios::binary);
         ObjectWriter writer=ObjectWriter(&file_writer);
 
         //write game information
@@ -953,7 +1128,7 @@ int main(void)
         //write minor structures
         for (int i=0; i<minor_list.size(); i+=1)
         {
-          writer.write(structure_list.at(i));
+          writer.write(minor_list.at(i));
         }
 
         //write roads
@@ -965,10 +1140,12 @@ int main(void)
         //write barbarians
         for (int i=0; i<tribes.size(); i+=1)
         {
+          cout<<"writing barbarian\n";
           writer.write(tribes.at(i));
         }
         
         file_writer.close();
+        cout<<"saved game\n";
         break;
       }
       case (14): //quit
@@ -976,8 +1153,7 @@ int main(void)
         cont=false;
         break;
       }
-      /*
-      case (14): //this is only for testing
+      case (15): //this is only for testing
       {
         cout<<"Debug: set start_attack=true;\n";
         start_attack=true;
@@ -1050,7 +1226,7 @@ int main(void)
       //cout<<"Checking for barbarian spawn\n";
       int random_number=rand()%100; //generate random number
       //cout<<"random number is "<<random_number<<"\n";
-      if  (random_number<5) //||(start_attack))//check if the barbarians spawn
+      if  ((random_number<5) ||(start_attack))//check if the barbarians spawn
       {
         Major* major_ptr=furthestStructure(&structure_list); //get the furthest structure
         cout<<"\033[1;31mA barbarian tribe is attacking "<<major_ptr->getName()<<"\033[0m\n"; //tell the player about the attack

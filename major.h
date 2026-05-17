@@ -73,6 +73,7 @@ public:
   int getClaimSize(); //get the number of claims
 
   bool canClaim(Land* potential); //return if the major can claim the input land tile
+  void forceClaim(Land* land_ptr); //force a major to claim a land tile (this is used when reading data from a save file)
 
   //limit functions===================================================
   void setLimit(int num); //set the land limit of the structure

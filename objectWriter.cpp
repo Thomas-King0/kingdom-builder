@@ -12,6 +12,10 @@
 #include "road.h"
 #include "caravan.h"
 #include "barbarian.h"
+#include "garden.h"
+#include "pasture.h"
+#include "sawmill.h"
+#include "quarry.h"
 #include "mine.h"
 #include "settings.h"
 
@@ -78,7 +82,7 @@ Land objects are written in the following order:
 x-position (int)
 y-position (int)
 land type (enumerated type)
-exploration status (bool)
+//exploration status (bool) actually this will not be stored as it is stored in the type
 keep name (string)
 */
   //data contained in the land tile
@@ -95,7 +99,7 @@ keep name (string)
     keep_name="";
   }
   Land_type type=land_tile->getType(); //what type of land it is
-  bool explored=land_tile->isExplored(); //boolean containing whether or not the tile is visible
+  //bool explored=land_tile->isExplored(); //boolean containing whether or not the tile is visible
 
   //get the file
   std::fstream* file_ptr=getFile();
@@ -105,7 +109,7 @@ keep name (string)
   file_ptr->write(reinterpret_cast<const char *>(&positionX), sizeof(int)); //write x-position
   file_ptr->write(reinterpret_cast<const char *>(&positionY), sizeof(int)); //write y-position
   file_ptr->write(reinterpret_cast<const char *>(&type), sizeof(Land_type)); //write land type
-  file_ptr->write(reinterpret_cast<const char *>(&explored), sizeof(bool)); //write exploration status
+  //file_ptr->write(reinterpret_cast<const char *>(&explored), sizeof(bool)); //write exploration status
   write(keep_name); //write the name as a string
 }
 
@@ -116,19 +120,19 @@ Land* ObjectWriter::readLand(std::string* name)
   int pos_x;
   int pos_y;
   Land_type type;
-  bool explored;
+  //bool explored;
   file_ptr->read(reinterpret_cast< char *>(&pos_x), sizeof(int)); //read x-position
   file_ptr->read(reinterpret_cast< char *>(&pos_y), sizeof(int)); //read y-position
   file_ptr->read(reinterpret_cast< char *>(&type), sizeof(Land_type)); //read land type
-  file_ptr->read(reinterpret_cast< char *>(&explored), sizeof(bool)); //read exploration status
+  //file_ptr->read(reinterpret_cast< char *>(&explored), sizeof(bool)); //read exploration status
   *name=readString(); //read the name
 
-  std::cout<<"x: "<<pos_x<<"\ny: "<<pos_y<<"\n"<<"type: "<<type<<"\n"<<(explored?"explored":"not explored")<<"\n";
+  //std::cout<<"x: "<<pos_x<<"\ny: "<<pos_y<<"\n"<<"type: "<<type<<"\n"<<(explored?"explored":"not explored")<<"\n";
   Land* land=new Land();
   land->setX(pos_x);
   land->setY(pos_y);
   land->setType(type);
-  land->setExplored(explored);
+  //land->setExplored(explored);
   return land;
 }
 
@@ -250,7 +254,6 @@ Major* ObjectWriter::readMajor(Land* land_ptr)
 
   //get the file
   std::fstream* file_ptr=getFile();
-
   name=readString(); //write the name of the major
   file_ptr->read(reinterpret_cast<char *>(&positionX), sizeof(int)); //write x-position
   file_ptr->read(reinterpret_cast<char *>(&positionY), sizeof(int)); //write y-position
@@ -341,8 +344,36 @@ Minor* ObjectWriter::readMinor(std::string* keep_name)
   *keep_name=readString();
 
   //initialize new minor
-  Minor* minor_ptr=new Mine(); //mine is used because I just need a non-abstract type to initialize it as
-  minor_ptr->setType(type);
+  Minor* minor_ptr;
+  switch (type)
+  {
+    case (GARDEN):
+    {
+      minor_ptr=new Garden();
+      break;
+    }
+    case (PASTURE):
+    {
+      minor_ptr=new Pasture();
+      break;
+    }
+    case (SAWMILL):
+    {
+      minor_ptr=new Sawmill();
+      break;
+    }
+    case (QUARRY):
+    {
+      minor_ptr=new Quarry();
+      break;
+    }
+    case (MINE):
+    {
+      minor_ptr=new Mine();
+      break;
+    }
+  }
+  //minor_ptr->setType(type); I don't need this line now that I have the above switch statement
   minor_ptr->setProducing(producing);
 
   return minor_ptr;  
@@ -395,7 +426,7 @@ Road* ObjectWriter::readRoad(std::string* dest1, std::string* dest2, std::string
   file_ptr->read(reinterpret_cast<char *>(&transporting), sizeof(bool)); //transportation status
   if (transporting)
   {
-    std::cout<<"reading caravan\n";
+    //std::cout<<"reading caravan\n";
     int data_id;
     file_ptr->read(reinterpret_cast<char *>(&data_id), sizeof(int)); //read the caravan id
     if (data_id!=CARAVAN_ID)

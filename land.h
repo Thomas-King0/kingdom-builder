@@ -21,7 +21,7 @@ private:
   Major* keep; //pointer to the keep (governing structure)
 
   Land_type type; //what type of land it is
-  bool explored; //boolean containing whether or not the tile is visible
+  //bool explored; //boolean containing whether or not the tile is visible
 
 public://still need to decide what arguments constructor should take
   Land(); //defualt constructor
@@ -45,7 +45,7 @@ public://still need to decide what arguments constructor should take
   std::string getTypeString(); //get the land type as a string
 
   //visibility functions
-  void setExplored(bool tf); //set the visible variable
+  //void setExplored(bool tf); //set the visible variable
   bool isExplored();
 
   //other functions
