@@ -358,7 +358,7 @@ void Major::trainTownsfolk()
 void Major::addTownsfolk()
 {
   //double birth_rate=0.16; //birth rate of townsfolk
-  int number=static_cast<int>(getPopulation(TOWNSFOLK)*(BIRTH_RATE)); //get the number of townfolk added
+  int number=static_cast<int>(getPopulation(TOWNSFOLK)*(BIRTH_RATE))+1; //get the number of townfolk added(automatically add at least 1)
   if (number>getVacancy()) //if the population would be more than the structure could handle
   {
     number=getVacancy(); //only add as many people as there is space left

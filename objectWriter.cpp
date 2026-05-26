@@ -12,6 +12,9 @@
 #include "road.h"
 #include "caravan.h"
 #include "barbarian.h"
+#include "castle.h"
+#include "village.h"
+#include "fort.h"
 #include "garden.h"
 #include "pasture.h"
 #include "sawmill.h"
@@ -277,9 +280,31 @@ Major* ObjectWriter::readMajor(Land* land_ptr)
   }
 
   //create new major
-  Major* major_ptr=new Major();
+  Major* major_ptr=nullptr;
+  switch (type)
+  {
+    case (CASTLE):
+    {
+      major_ptr=new Castle();
+      break;
+    }
+    case (VILLAGE):
+    {
+      major_ptr=new Village();
+      break;
+    }
+    case (FORT):
+    {
+      major_ptr=new Fort();
+      break;
+    }
+    default:
+    {
+      std::cout<<"unrecognized id when reading Major object\n";
+      major_ptr=new Major();
+    }
+  }
   major_ptr->setName(name);
-  major_ptr->setType(type);
   for (int i=FARMER; i<=TOWNSFOLK; i+=1)
   {
     int current=people.at(i);

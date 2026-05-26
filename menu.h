@@ -11,6 +11,7 @@ private:
   std::string prompt;
   std::vector<std::string> options;  
   std::string color;
+  std::string help_page;
 public:
   Menu(std::string prompt); //constructor (no options)
   Menu(std::string prompt, std::vector<std::string> options); //constructor (with optioins)
@@ -23,6 +24,9 @@ public:
   void clearOptions(); //clear all options
   void setColor(int ansi); //set the ansi color code
   std::string getColor(); //get the color code
+
+  void setHelp(std::string message); //set the help menu
+  void help(); //display the help menu
 
   void display(); //display the menu
   int* getChoice(); //get the choice

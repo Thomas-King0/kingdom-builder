@@ -39,7 +39,7 @@ int main(void)
   */
   string save_name; //the name of the current save
   //seed the random number generation
-  srand(37);
+  srand(time(0));
 
   //initialize data vectors
   vector <Land> test_land;
@@ -100,12 +100,12 @@ int main(void)
 
       //set values of starting castle
       structure_list[0]->setBase(&test_land[pos2index(MAP_SIZE,MAP_SIZE)]);
-      structure_list[0]->setPopulation(TOWNSFOLK,VILLAGE_CAPACITY*2 ); //50); this is just a test
-      structure_list[0]->setMaterials(WOOD, 100);
-      structure_list[0]->setMaterials(ANIMALS, 100);
-      structure_list[0]->setMaterials(METAL, 50);
-      structure_list[0]->setMaterials(STONE, 100);
-      structure_list[0]->setMaterials(PRODUCE, 200);
+      structure_list[0]->setPopulation(TOWNSFOLK,50); 
+      structure_list[0]->setMaterials(WOOD, 15);
+      structure_list[0]->setMaterials(ANIMALS, 20);
+      structure_list[0]->setMaterials(METAL, 15);
+      structure_list[0]->setMaterials(STONE, 15);
+      structure_list[0]->setMaterials(PRODUCE, 20);
       structure_list[0]->changeName();
     
       //structure_list[1]->setBase(&test_land[pos2index(MAP_SIZE+3, MAP_SIZE)]);
@@ -169,6 +169,7 @@ int main(void)
             int index=pos2index(base_ptr->getX(), base_ptr->getY()); //get the index of the base
             major_ptr->setBase(&test_land.at(index)); //set the base tile
             //set land limit
+            /*
             switch (major_ptr->getType())
             {
               case (CASTLE):
@@ -192,6 +193,7 @@ int main(void)
                 break;
               }
             }
+            */
             structure_list.push_back(major_ptr); //push the pointer into the vector
             delete base_ptr; //delete the extra land pointer
             break;
@@ -295,9 +297,25 @@ int main(void)
 
   //menus
   vector<string> action_options={"produce", "build", "train townsfolk", "display data", "display map", "explore", "claim land", "list structure",
-    "transport cargo", "wait", "attack", "rename a structure", "save", "quit", "start attack"};
+    "transport cargo", "attack", "rename a structure", "wait",  "save", "quit"};
   Menu action_menu=Menu("Choose an action", action_options);
   action_menu.setColor(105);
+  string action_help="this is the main menu. Here you choose what action you would like to take this turn.\n";
+  action_help+="Produce is how you acquire resources. \nBuild is how you make more villages, castles, mines, and the like. \n";
+  action_help+="Train townsfolk is how you turn your townsfolk into various tradesmen. \n";
+  action_help+="Display data displays various information about a specific location. \n";
+  action_help+="Display map shows you a map of explored territory. \n";
+  action_help+="Explore allows you to venture out an discover new land tiles. \n";
+  action_help+="Claim land is how you get more land to build structures on.\n";
+  action_help+="List structure provides a list of all major structures.\n";
+  action_help+="Transport cargo is how you move people and materials between locations.\n";
+  action_help+="Attack is how you fight off invading barbarian tribes.\n";
+  action_help+="Rename structure allows you to change the name of an existing structure.\n";
+  action_help+="Wait allows you to essentially pass and check if any ongoing processes have finished.\n";
+  action_help+="Save saves the current game state.\n";
+  action_help+="Quit exits the game.\n";
+  
+  action_menu.setHelp(action_help);
 
   vector<string> build_options={"mine", "pasture", "quarry", "sawmill", "garden", "castle", "fort", "village", "road"}; //options for what the user can build
   Menu build_menu=Menu("What are you going to build", build_options);
@@ -979,11 +997,7 @@ int main(void)
         }
         break;
       }
-      case (10): //wait
-      {
-        break;
-      }
-      case (11): //attack a tribe
+      case (10): //attack a tribe
       {
         //**********************************get the location of the defenders***********************************
         Menu attack_menu=Menu("Choose location to attack with");
@@ -1067,7 +1081,7 @@ int main(void)
         }
         break;
       }
-      case (12): //change name
+      case (11): //change name
       {
         Menu name_menu=Menu("Choose structure to rename");
         name_menu.addOption(listStructures(&structure_list));
@@ -1097,6 +1111,10 @@ int main(void)
         {
           cout<<"\033[31mthere is already a structure with that name\033[0m\n";
         }
+        break;
+      }
+      case (12): //wait
+      {
         break;
       }
       case (13): //save
@@ -1150,9 +1168,19 @@ int main(void)
       }
       case (14): //quit
       {
-        cont=false;
-        break;
+        cout<<"If you quit, all unsaved progress will be lost\nAre you sure you want to quit?\n";
+        Menu quit_menu=Menu("          ");
+        quit_menu.addOption("yes");
+        quit_menu.addOption("no");
+        quit_menu.display();
+        int* answer=quit_menu.getChoice();
+        if (*answer==1)
+        {
+          cont=false;
+          break;
+        }
       }
+      /*
       case (15): //this is only for testing
       {
         cout<<"Debug: set start_attack=true;\n";
@@ -1226,7 +1254,7 @@ int main(void)
       //cout<<"Checking for barbarian spawn\n";
       int random_number=rand()%100; //generate random number
       //cout<<"random number is "<<random_number<<"\n";
-      if  ((random_number<5) ||(start_attack))//check if the barbarians spawn
+      if  (random_number<3) //||(start_attack))//check if the barbarians spawn
       {
         Major* major_ptr=furthestStructure(&structure_list); //get the furthest structure
         cout<<"\033[1;31mA barbarian tribe is attacking "<<major_ptr->getName()<<"\033[0m\n"; //tell the player about the attack
@@ -1301,13 +1329,30 @@ int main(void)
           }
         }
       }
-      spread=false;
+      //spread=false;
     }
     //********************************************check for end of game**************************************************
-    if (wins==3)
+    if (wins==5)
     {
-      cout<<"\033[1;32mCongratulations! You won!\033[0m You fended off the barbarian hordes three times, showing that your"
+      cout<<"\033[1;32mCONGRATULATIONS! YOU WON!\033[0m You fended off the barbarian hordes three times, showing that your"
         <<"kingdom is strong enough to protect itself.\n Thanks for playing\n";
+      cont=false;
+    }
+
+    bool all_occupied=true;
+    for (int i=0; i<structure_list.size(); i+=1)
+    {
+      if (!structure_list.at(i)->isOccupied()) //if there is an unoccupied structure
+      {
+        all_occupied=false;
+        break;
+      }
+    }
+
+    if (all_occupied)
+    {
+      cout<<"\033[1;31m\n\nGAME OVER\n\nYour Kingdom has fallen!\033[0m"
+          <<"All of your villages, castles, and forts are taken by barbarian tribes.Better luck next time!\n";
       cont=false;
     }
   }
