@@ -300,7 +300,7 @@ bool isElement(char elmt, std::string str)
 }
 
 //getName
-void getName(std::string* name)
+void getString(std::string* name)
 {
   if (std::cin.peek()=='\n')
   {
@@ -1039,8 +1039,7 @@ void getCoords(int* x_coord, int* y_coord)
 /*
   //get the player input
   std::string input;
-  getName(&input); //get name is used because it is a reliable way to set a string
-  //It probably should be called getString but I am not going to refactor all of its uses
+  getString(&input); //get the name of the structure
 
   std::vector<std::string> input_vec; //initialize vector
   parseString(&input_vec, &input); //parse input (separate into space separated values)

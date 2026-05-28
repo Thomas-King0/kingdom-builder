@@ -71,7 +71,7 @@ int main(void)
     case (1): //new game
     {
       cout<<"What do you want to name this save: ";
-      getName(&save_name);
+      getString(&save_name);
       fstream file;
       file.open((save_name+".bin"), ios::out | ios::binary);
       if (!file)
@@ -114,7 +114,7 @@ int main(void)
     case (2): //load game
     {
       cout<<"Please enter name of save: ";
-      getName(&save_name);
+      getString(&save_name);
       fstream file;
       string file_name=(save_name+".bin");
       cout<<"opening "<<file_name<<"\n";
@@ -1030,7 +1030,7 @@ int main(void)
 /*
         cout<<"Where are you attacking from:\n";
         string attacker_name;
-        getName(&attacker_name);
+        getString(&attacker_name);
 */
         int index2;
         choice_ptr=target_menu.getChoice();
@@ -1102,7 +1102,7 @@ int main(void)
 
         cout<<"What do you want to rename it: ";
         string new_name;
-        getName(&new_name);
+        getString(&new_name);
         if (getStructure(new_name, &structure_list)==nullptr)
         {
           major_ptr->setName(new_name);
@@ -1197,7 +1197,7 @@ int main(void)
       {
         cout<<"where would you like to add soldiers: ";
         string sender;
-        getName(&sender);
+        getString(&sender);
 
         Major* sender_ptr=getStructure(sender, &structure_list);
         int num;

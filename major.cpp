@@ -620,9 +620,7 @@ void Major::load()
   std::cout<<"connected structures\n{\n"<<getSisterList()<<"}\nwhere are you sending this caravan: ";
   std::string name;
 
-  ::getName(&name);
-  *:: is the global scope resolution operator. it is needed because otherwise the compiler thinks
-   *this is Major::getName(), not getName(Major*) from helpful.h
+  getString(&name);
    */
 
   //Check that the destination is valid
