@@ -23,10 +23,19 @@
 
 //minor structure constants
 #define MINE_PRODUCTION 60 //How long it takes a mine to produce
+#define MINE_MULTIPLIER 1 //how much metal each miner produces
+
 #define QUARRY_PRODUCTION 45 //how long it takes for a quarry to produce
+#define QUARRY_MULTIPLIER 2 //how much stone each stone mason produces
+
 #define SAWMILL_PRODUCTION 30 //how many seconds it takes a sawmill to produce
+#define SAWMILL_MULTIPLIER 3 //how much wood each lumberjack produces
+
 #define PASTURE_PRODUCTION 15 //how long it takes a pasture to produce
+#define PASTURE_MULTIPLIER 4 //how much livestock each shepherd produces
+
 #define GARDEN_PRODUCTION 5 //how long it takes a garden to produce
+#define GARDEN_MULTIPLIER 5 //how much produce each farmer produces
 
 //village constants
 #define VILLAGE_CAPACITY 50 //this is the total capacity of the village
@@ -39,7 +48,7 @@
 #define CASTLE_DEFENSE 0.04
 
 //fort constants
-#define FORT_CAPACITY 50
+#define FORT_CAPACITY 80
 #define FORT_LIMIT 0
 #define FORT_DEFENSE 0.02
 

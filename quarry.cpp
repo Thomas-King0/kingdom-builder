@@ -33,9 +33,9 @@ void Quarry::endProduction()
       setProducing(false); //stop production
       int inventory=(getKeep())->getMaterials(STONE); //get the number of materials the keep currently has
       int tradesmen=(getKeep())->getPopulation(STONE_MASON); //get the population of miners
-      (getKeep())->setMaterials(STONE, inventory+2*tradesmen);
+      (getKeep())->setMaterials(STONE, inventory+QUARRY_MULTIPLIER*tradesmen);
       std::cout<<"Finished production in a quarry attached to "<<getKeep()->getName()
-        <<", added "<<2*tradesmen<<" stone to inventory\n";
+        <<", added "<<QUARRY_MULTIPLIER*tradesmen<<" stone to inventory\n";
       //for metal, the number of materials produced is equal to the number of tradesmen
     }
   }

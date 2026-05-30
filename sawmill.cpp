@@ -33,9 +33,9 @@ void Sawmill::endProduction()
       setProducing(false); //stop production
       int inventory=(getKeep())->getMaterials(WOOD); //get the number of materials the keep currently has
       int tradesmen=(getKeep())->getPopulation(LUMBERJACK); //get the population of miners
-      (getKeep())->setMaterials(WOOD, inventory+3*tradesmen);
+      (getKeep())->setMaterials(WOOD, inventory+SAWMILL_MULTIPLIER*tradesmen);
       std::cout<<"Finished production in a sawmill attached to "<<getKeep()->getName()
-        <<", added "<<3*tradesmen<<" wood to inventory\n";
+        <<", added "<<SAWMILL_MULTIPLIER*tradesmen<<" wood to inventory\n";
       //for metal, the number of materials produced is equal to the number of tradesmen
     }
   }

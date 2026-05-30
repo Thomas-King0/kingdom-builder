@@ -295,7 +295,9 @@ int main(void)
   }
 
 
-  //menus
+  //*****************************************************************menus*****************************************************************
+
+  //action menu
   vector<string> action_options={"produce", "build", "train townsfolk", "display data", "display map", "explore", "claim land", "list structure",
     "transport cargo", "attack", "rename a structure", "wait",  "save", "quit"};
   Menu action_menu=Menu("Choose an action", action_options);
@@ -317,9 +319,110 @@ int main(void)
   
   action_menu.setHelp(action_help);
 
-  vector<string> build_options={"mine", "pasture", "quarry", "sawmill", "garden", "castle", "fort", "village", "road"}; //options for what the user can build
+  //build menu
+  vector<string> build_options={"garden", "pasture", "sawmill", "quarry", "mine", "castle", "fort", "village", "road"}; //options for what the user can build
   Menu build_menu=Menu("What are you going to build", build_options);
   build_menu.setColor(105);
+  string build_help="\033[1;38;5;81mBuild\033[0m\n\n";
+  build_help+="This is the build menu. You can use this menu to build more structures in your kingdom.\n";
+  build_help+="To see the cost of building a structure select it in this menu\n";
+  build_help+="Major structures are large structures that house people, store materials, and can have certain other structures attached.\n";
+  build_help+="Minor structures are smaller structures used to produce resources. They have to be built in a major structure.\n\n";
+  build_help+="\033[1;38;5;140mMinor Structures:\033[0m\n";
+  build_help+="Gardens are used to produce produce. They require farmers.Gardens can only be built in tundra.\n";
+  build_help+="Pastures are used to produce animals. They require shephers. Pastures can be built in fields or tundra.\n";
+  build_help+="Sawmills are used to produce wood. They require lumberjacks. Sawmills can only be built in forests.\n";
+  build_help+="Quarries are used to produce stone. They require stone masons. Quarries can be built in forests, mountains, or tundra.\n";
+  build_help+="Mines are used to produce metal. They require miners. Mines can be built in forests, fields, or mountains.\n\n";
+  build_help+="\033[1;38;5;118mMajor Structures:\033[0m\n";
+  build_help+="Castles are large fortified structures. They can claim up to 11 land tiles, have room for 300 people,\n";
+  build_help+="  and also have defenses that make it harder for attacking tribes to defeat them.\n";
+  build_help+="  Castles can also train townsfolk into soldiers.\n";
+  build_help+="  Castles can be built in a forest or fields.\n";
+  build_help+="Villages are quick cheap structures for housing people and materials. They can claim up to 3 land tiles, can house up to 50 people,\n";
+  build_help+="  but have no defenses to attackers except any soldiers stationed there.\n";
+  build_help+="  Villages can be built on any tile except a sea.\n";
+  build_help+="Forts are structures designed for defense. They cannot claim any land,\n";
+  build_help+="  but can house up to 80 people and have good defenses against barbarian tribes. Forts can train townsfolk into soldiers.\n";
+  build_help+="  Forts can be built on any tile except a sea.\n\n";
+  build_help+="\033[1;38;5;122mOther structures\033[0m\n";
+  build_help+="Roads are structures that connect two major structures. They can be used to transport people or materials,\n";
+  build_help+="  however a road connected to an occupied location cannot be used. The time a journey takes is dependent on the length of the road.\n";
+  build_help+="  The cost of a road is also dependent on its length.\n\n\n";
+  build_menu.setHelp(build_help);
+
+
+  //production menu (help page)
+  string production_help="\033[1;38;5;39mProduction\033[0m\n\n";
+  production_help+="Production is how you acquire more resources. When you use\n";
+  production_help+="production it is activated for an entire location at once.\n";
+  production_help+="Any structures currently producing will continue, and any\n";
+  production_help+="structures not already producing will begin if possible.\n";
+  production_help+="If a location is overrun with barbarians production stops\n";
+  production_help+="and any materials in the process of production are lost\n\n";
+  production_help+="\033[1;38;5;41mGardens\033[0m:\n\tTime: "+int2string(GARDEN_PRODUCTION)+" seconds\n";
+  production_help+="\tAmount produced per worker: "+int2string(GARDEN_MULTIPLIER)+"\n\n";
+  production_help+="\033[1;38;5;166mPastures\033[0m:\n\tTime: "+int2string(PASTURE_PRODUCTION)+" seconds\n";
+  production_help+="\tAmount produced per worker: "+int2string(PASTURE_MULTIPLIER)+"\n\n";
+  production_help+="\033[1;38;5;184mSawmills\033[0m:\n\tTime: "+int2string(SAWMILL_PRODUCTION)+" seconds\n";
+  production_help+="\tAmount produced per worker: "+int2string(SAWMILL_MULTIPLIER)+"\n\n";
+  production_help+="\033[1;38;5;197mQuarries\033[0m:\n\tTime: "+int2string(QUARRY_PRODUCTION)+" seconds\n";
+  production_help+="\tAmount produced per worker: "+int2string(QUARRY_MULTIPLIER)+"\n\n";
+  production_help+="\033[1;38;5;196mMines\033[0m:\n\tTime: "+int2string(MINE_PRODUCTION)+" seconds\n";
+  production_help+="\tAmount produced per worker: "+int2string(MINE_MULTIPLIER)+"\n\n";
+
+  //train menu (help page)
+  string train_help="\033[1;38;5;226mTrain Townsfolk\033[0m\n\n";
+  train_help+="training townsfolk in a trade is how you get more tradesmen.\n";
+  train_help+="Most trades can be trained in any location, soldiers are\n";
+  train_help+="the only career type that must be trained at a castle or fort.\n";
+  train_help+="Townsfolk will occasionally multiply, but only townfolk can multiply.\n";
+
+  //data menu (help page)
+  string data_help="\033[1;38;5;93mDisplay Data\033[0m\n\n";
+  data_help+="Choose a location to display the data for. Any\n";
+  data_help+="data relating to that location(such as population\n";
+  data_help+="data, inventory, available land, etc) will be shown.\n";
+
+  //map menu (help page)
+  string map_help="\033[1;38;5;82mDisplay Map\033[0m\n\n";
+  map_help+="This action displays a map of your kingdom.\n";
+  map_help+="Because your kingdom may become too big to\n";
+  map_help+="fit in the map, you must choose a location\n";
+  map_help+="to be the center of the map. There is a legend\n";
+  map_help+="at the bottom of the map.\n";
+
+  //claim land menu (help page)
+  string claim_help="\033[1;38;5;51mClaim Land\033[0m\n\n";
+  claim_help+="Any location must have land if it is going\n";
+  claim_help+="to have supporting structures. First choose\n";
+  claim_help+="which location you would like to claim land\n";
+  claim_help+="for, then enter the coordinates of the land\n";
+  claim_help+="you would like to claim. The game will then\n";
+  claim_help+="check if the land can be claimed. In order\n";
+  claim_help+="for a land to be claimable it must be close\n";
+  claim_help+="enough to the location trying to claim it,\n";
+  claim_help+="it must be adjacent to land already part of\n";
+  claim_help+="the location, and the location must have\n";
+  claim_help+="enough room for growth. Castles can claim "+int2string(CASTLE_LIMIT)+"\n";
+  claim_help+="land tiles. Villages can claim "+int2string(VILLAGE_LIMIT)+" land tiles.\n";
+  claim_help+="Forts cannot claim any land.\n\n";
+
+  //transport menu (help page)
+  string transport_help="\033[1;38;5;135mTransport\033[0m\n\n";
+  transport_help+="Transportation is how you move people and\n";
+  transport_help+="materials between locations. First select\n";
+  transport_help+="the location that is sending the caravan\n";
+  transport_help+="(the load being transported), then select\n";
+  transport_help+="from the connected locations where you\n";
+  transport_help+="like to send that caravan. Only one caravan\n";
+  transport_help+="can be on a road at a given time. Caravans\n";
+  transport_help+="cannot be sent to or from locations that\n";
+  transport_help+="are occupied by a barbarian tribe. If a\n";
+  transport_help+="caravan is sent to a location that gets\n";
+  transport_help+="attacked while the caravan is en route, then\n";
+  transport_help+="that caravan and everything in it will be\n";
+  transport_help+="lost. So be careful.\n";
 
   bool cont=true;
   while (cont==true)
@@ -349,6 +452,9 @@ int main(void)
         //cout<<"where would you like to produce:\n";
         Menu production_menu=Menu("Choose a structure to start production");
         production_menu.setColor(208);
+
+
+        production_menu.setHelp(production_help); //add the help menu
 
         production_menu.addOption(listStructures(&structure_list)); //add the list of structures to the production menu options
         production_menu.display();
@@ -389,7 +495,7 @@ int main(void)
 
         switch (action_2)
         {
-          case (1): //mine
+          case (5): //mine
           {
             cout<<"To build a mine costs 3 animals, 3 wood, and 5 metal\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
@@ -488,7 +594,7 @@ int main(void)
             }
             break;
           }
-          case (3): //quarry
+          case (4): //quarry
           {
             cout<<"To build a quarry costs 5 produce, 2 animals, 5 wood, and 5 metal\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
@@ -533,7 +639,7 @@ int main(void)
             }
             break;
           }
-          case (4): //sawmill
+          case (3): //sawmill
           {
             cout<<"To build a sawmill costs 7 wood, 3 stone, and 2 metal\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
@@ -583,7 +689,7 @@ int main(void)
             }
             break;
           }
-          case (5): //garden
+          case (1): //garden
           {
             cout<<"To build a garden costs 5 produce, 2 wood\n"
               <<"do you want to continue\n"<<"1. continue\n2. exit\n";
@@ -808,6 +914,7 @@ int main(void)
       {
         Menu train_menu=Menu("Where would you like to train townsfolk");
         train_menu.addOption(listStructures(&structure_list));
+        train_menu.setHelp(train_help);
         train_menu.display();
 
         int index;
@@ -827,6 +934,7 @@ int main(void)
       {
         Menu data_menu=Menu("Choose structure to display data");
         data_menu.addOption(listStructures(&structure_list));
+        data_menu.setHelp(data_help);
         data_menu.display();
 
         int index;
@@ -846,6 +954,7 @@ int main(void)
       {
         Menu map_menu=Menu("Choose structure to center on");
         map_menu.addOption(listStructures(&structure_list));
+        map_menu.setHelp(map_help);
         map_menu.display();
         
         int index;
@@ -913,6 +1022,7 @@ int main(void)
       {
         Menu claim_menu=Menu("Choose structure to claim land for");
         claim_menu.addOption(listStructures(&structure_list));
+        claim_menu.setHelp(claim_help);
         claim_menu.display();
 
         int index;
@@ -970,6 +1080,7 @@ int main(void)
       {
         Menu transport_menu=Menu("Select location to send caravan from");
         transport_menu.addOption(listStructures(&structure_list));
+        transport_menu.setHelp(transport_help);
         transport_menu.display();
 
         int index;

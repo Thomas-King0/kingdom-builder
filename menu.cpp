@@ -143,7 +143,7 @@ void Menu::display()
   {
     std::cout<<"  "<<(j+1)<<". "<<getOption(j)<<"\n";
   }
-  std::cout<<"  "<<(j+1)<<". help\n"; //automatically add a help option
+  //std::cout<<"  "<<(j+1)<<". help\n"; //automatically add a help option
   std::cout<<"\n";
 
   //bottom of menu
@@ -165,17 +165,25 @@ int* Menu::getChoice()
   int choice=0;
   while ((choice<1)||(choice>options.size()))
   {
-    int* num=getInt();
-    if (num!=nullptr)
+    std::string response;
+    getString(&response); //get the response of the player
+    //int* num=getInt();
+    if (response=="help")
     {
-      choice=*num;
+      help(); //display the help page
+      display(); //display the menu again
+      continue;
+    }
+    else if (response=="exit")
+    {
+      return nullptr;
+    }
+    else if (isNum(response))
+    {
+      choice=string2num(response);
     }
 
-    if (choice==options.size()+1) //the help option
-    {
-      help();
-    }
-    else if ((choice<1)||(choice>(options.size()+1)))
+    if ((choice<1)||(choice>(options.size()+1)))
     {
       std::cout<<"not a valid choice: pick again\n";
     }

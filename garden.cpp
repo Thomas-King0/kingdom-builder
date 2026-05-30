@@ -32,9 +32,9 @@ void Garden::endProduction()
       setProducing(false); //stop production
       int inventory=(getKeep())->getMaterials(PRODUCE); //get the number of materials the keep currently has
       int tradesmen=(getKeep())->getPopulation(FARMER); //get the population of miners
-      (getKeep())->setMaterials(PRODUCE, inventory+5*tradesmen);
+      (getKeep())->setMaterials(PRODUCE, inventory+GARDEN_MULTIPLIER*tradesmen);
       std::cout<<"Finished production in a garden attached to "<<getKeep()->getName()
-        <<", added "<<5*tradesmen<<" produce to inventory\n";
+        <<", added "<<GARDEN_MULTIPLIER*tradesmen<<" produce to inventory\n";
       //for metal, the number of materials produced is equal to the number of tradesmen
     }
   }
