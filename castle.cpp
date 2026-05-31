@@ -53,7 +53,13 @@ void Castle::trainTownsfolk()
   train_menu.addOption({"farmer", "lumberjack", "miner", "shepherd", "stone mason", "soldier"});
   train_menu.display();
 
-  int input=*train_menu.getChoice();
+  int* input_ptr=train_menu.getChoice();
+  if (input_ptr==nullptr)
+  {
+    std::cout<<"exiting...\n";
+    return;
+  }
+  int input=*input_ptr;
   if ((input>0)&&(input<=6)) //input needs to be between 0 and 6 because there are 6 trades
   {
     std::cout<<"This "<<getTypeString()<<" has "<<getPopulation(TOWNSFOLK)<<" townsfolk\n"

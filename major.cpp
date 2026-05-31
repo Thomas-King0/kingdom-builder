@@ -319,7 +319,13 @@ void Major::trainTownsfolk()
   trade_menu.addOption({"farmer", "lumberjack", "miner", "shepherd", "stone mason"});
   trade_menu.display();
 
-  int input=*trade_menu.getChoice();
+  int* input_ptr=trade_menu.getChoice();
+  if (input_ptr==nullptr)
+  {
+    std::cout<<"exiting...\n";
+    return;
+  }
+  int input=*input_ptr;
 
   if ((input>0)&&(input<=5))
   {

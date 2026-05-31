@@ -62,11 +62,16 @@ int main(void)
   Menu start_menu=Menu("Welcome to LTKingdom!");
   start_menu.addOption("new game");
   start_menu.addOption("load game");
-  int option;
+  int* option;
   start_menu.display();
-  option=*start_menu.getChoice();
+  option=start_menu.getChoice();
+  if (option==nullptr)
+  {
+    cout<<"exiting...\n";
+    return 0;
+  }
 
-  switch (option)
+  switch (*option)
   {
     case (1): //new game
     {
@@ -292,6 +297,11 @@ int main(void)
       */
       break;
     }
+    default:
+    {
+      cout<<"error when trying to start game\n";
+      return 0;
+    }
   }
 
 
@@ -423,6 +433,16 @@ int main(void)
   transport_help+="attacked while the caravan is en route, then\n";
   transport_help+="that caravan and everything in it will be\n";
   transport_help+="lost. So be careful.\n";
+
+  //attack menu (help page)
+  string attack_help="\033[1;38;5;32mAttack\033[0m\n\n";
+  attack_help+="When a barbarian tribe takes over one of your\n";
+  attack_help+="structures, you will need to attack them to get\n";
+  attack_help+="rid of them. First choose where you are going\n";
+  attack_help+="base your attack from. Then choose the target\n";
+  attack_help+="of your attack. You cannot attack a tribe with\n";
+  attack_help+="soldiers from an occupied city.\n";
+  //attack_help+="
 
   bool cont=true;
   while (cont==true)
@@ -575,6 +595,10 @@ int main(void)
             {
                 index=*choice_ptr;
             }
+            else
+            {
+              break;
+            }
             Major* major_ptr=structure_list.at(index-1); 
             if (major_ptr==nullptr) //if there is no structure with that name
             {
@@ -624,6 +648,10 @@ int main(void)
             {
               index=*choice_ptr;
             }
+            else
+            {
+              break;
+            }
             Major* major_ptr=structure_list.at(index-1); 
 
             if (canBuildMinor(QUARRY, major_ptr)) //if the mine can be built
@@ -668,6 +696,10 @@ int main(void)
             if (choice_ptr!=nullptr)
             {
               index=*choice_ptr;
+            }
+            else
+            {
+              break;
             }
             Major* major_ptr=structure_list.at(index-1); 
 
@@ -718,6 +750,10 @@ int main(void)
             if (choice_ptr!=nullptr)
             {
               index=*choice_ptr;
+            }
+            else
+            {
+              break;
             }
             Major* major_ptr=structure_list.at(index-1); 
             if (major_ptr==nullptr) //if there is no structure with that name
@@ -923,6 +959,10 @@ int main(void)
         {
           index=*choice_ptr;
         }
+        else
+        {
+          break;
+        }
         Major* major_ptr=structure_list.at(index-1); //getStructure(name, &structure_list); //get the pointer to the major
         if ((major_ptr!=nullptr)&&(!major_ptr->isOccupied())) //make sure the najor exists and is not occupied
         {
@@ -943,6 +983,10 @@ int main(void)
         {
           index=*choice_ptr;
         }
+        else
+        {
+          break;
+        }
         Major* major_ptr=structure_list.at(index-1); //getStructure(name, &structure_list); //get a pointer to the structure
         if (major_ptr!=nullptr)
         {
@@ -962,6 +1006,10 @@ int main(void)
         if (choice_ptr!=nullptr)
         {
           index=*choice_ptr;
+        }
+        else
+        {
+          break;
         }
         Major* major_ptr=structure_list.at(index-1); //getStructure(name, &structure_list);
         if (major_ptr==nullptr)
@@ -1007,6 +1055,10 @@ int main(void)
         {
           direction=*choice_ptr;
         }
+        else
+        {
+          break;
+        }
         int index=pos2index(start_x, start_y); //convert the player entered coordinates to an index
         if (test_land[index].getType()!=SPACE) //as long as the starting tile is explored
         {
@@ -1030,6 +1082,10 @@ int main(void)
         if (choice_ptr!=nullptr)
         {
           index=*choice_ptr;
+        }
+        else
+        {
+          break;
         }
         Major* major_ptr=structure_list.at(index-1); //getStructure(name, &structure_list); //get the structure
 
@@ -1089,6 +1145,10 @@ int main(void)
         {
           index=*choice_ptr;
         }
+        else
+        {
+          break;
+        }
         Major* sender_ptr=structure_list.at(index-1); //getStructure(sender, &structure_list);
 
         if (sender_ptr!=nullptr) //if the chosen structure exists
@@ -1110,7 +1170,7 @@ int main(void)
       }
       case (10): //attack a tribe
       {
-        //**********************************get the location of the defenders***********************************
+        //**********************************get the location of the attackers***********************************
         Menu attack_menu=Menu("Choose location to attack with");
         attack_menu.addOption(listStructures(&structure_list));
         attack_menu.display();
@@ -1120,6 +1180,10 @@ int main(void)
         if (choice_ptr!=nullptr)
         {
           index=*choice_ptr;
+        }
+        else
+        {
+          break;
         }
         Major* attacker_ptr=structure_list.at(index-1); //getStructure(target_name, &structure_list);
         if (attacker_ptr==nullptr)
@@ -1134,20 +1198,20 @@ int main(void)
         }
 
 
-        //*********************************get the location of the attackers**********************************
+        //*********************************get the location of the defenders**********************************
         Menu target_menu=Menu("Choose location to attack");
         target_menu.addOption(listStructures(&structure_list));
         target_menu.display();
-/*
-        cout<<"Where are you attacking from:\n";
-        string attacker_name;
-        getString(&attacker_name);
-*/
+
         int index2;
         choice_ptr=target_menu.getChoice();
         if (choice_ptr!=nullptr)
         {
           index2=*choice_ptr;
+        }
+        else
+        {
+          break;
         }
         Major* target_ptr=structure_list.at(index2-1); //getStructure(attacker_name, &structure_list);
         if (target_ptr==nullptr)
@@ -1203,6 +1267,10 @@ int main(void)
         if (choice_ptr!=nullptr)
         {
           index=*choice_ptr;
+        }
+        else
+        {
+          break;
         }
         Major* major_ptr=structure_list.at(index-1); //getStructure(name, &structure_list);
         if (major_ptr==nullptr)
@@ -1285,7 +1353,11 @@ int main(void)
         quit_menu.addOption("no");
         quit_menu.display();
         int* answer=quit_menu.getChoice();
-        if (*answer==1)
+        if (answer==nullptr)
+        {
+          break;
+        }
+        else if (*answer==1)
         {
           cont=false;
           break;
@@ -1327,144 +1399,147 @@ int main(void)
 
 
 //**************************check for end of production and increase population of townsfolk****************************
-    for (int i=0;i<structure_list.size();i+=1)
+    if (cont)
     {
-      if (structure_list[i]->isOccupied()==false)
-      {
-        //check for end of production
-        structure_list[i]->endProduction();
-
-        //increase population
-
-        int random_number=rand()%100; //generate a random number from 0-99
-        if (random_number<BIRTH_FREQUENCY) //give any one village a 5% chance of increase
+        for (int i=0;i<structure_list.size();i+=1)
         {
-          structure_list[i]->addTownsfolk();
-          cout<<"added townsfolk to "<<structure_list[i]->getName()<<"\n";
-        }
-      }
-      else
-      {
-        cout<<structure_list[i]->getName()<<" is occupied\n";
-      }
-    }
-
-
-
-//***********************************check for end of journey****************************************
-    for (int i=0; i<highway.size(); i+=1)
-    {
-      highway[i]->endJourney(); //try to end the journey
-    }
-
-
-
-//***************************************check barbarians********************************************
-    if (Barbarian::tribe_count==0) //if there are not currently barbarians
-    {
-      //cout<<"Checking for barbarian spawn\n";
-      int random_number=rand()%100; //generate random number
-      //cout<<"random number is "<<random_number<<"\n";
-      if  (random_number<3) //||(start_attack))//check if the barbarians spawn
-      {
-        Major* major_ptr=furthestStructure(&structure_list); //get the furthest structure
-        cout<<"\033[1;31mA barbarian tribe is attacking "<<major_ptr->getName()<<"\033[0m\n"; //tell the player about the attack
-        pause(1);
-        Village steppes=Village(); //give the barbarians a beginning structure tile to start from
-        Barbarian* tribe_ptr=new Barbarian(&steppes);
-        tribe_ptr->setPopulation(25);
-        if (tribe_ptr->getKeep()->attack(major_ptr))
-        {
-          cout<<"\033[31mthe barbarians won\033[0m\n";
-          tribe_ptr->setKeep(major_ptr); //set the major as the keep
-          tribes.push_back(tribe_ptr); //initialize the barbarians
-          barbarian_invasion=true;
-        }
-        else
-        {
-          cout<<"\033[32myou fended off the barbarians\033[0m\n";
-          Barbarian::tribe_count-=1; //decrement the tribe counter
-        }
-        start_attack=false;
-      }
-    }
-    else //if there are barbarians
-    {
-      int current_tribe_count=Barbarian::tribe_count;
-      //this variable is so that if any of the tribes spread, the new tribes are also not iterated over
-      for (int i=0; i<current_tribe_count; i+=1)
-      {
-        //increase population
-        tribes.at(i)->increasePopulation(); //try to increase the population of all tribes
-
-        //pillage
-        tribes.at(i)->pillage(); //try to pillage with all tribes
-
-        //spread
-        double chance=(rand()%100+1)/100.0; //get a double between 0 and 1
-        if ((chance<Barbarian::spread_chance)&&(tribes.at(i)->getPopulation()>BARBARIAN_THRESHOLD))
-        //if the number is low enough so the barbarians spread
-        //if the barbarian tribe has enough people to spread
-        {
-          cout<<"the barbarians are spreading\n";
-          Major* target_ptr=tribes.at(i)->getTarget(); //get the next target for the tribe
-          if (target_ptr==nullptr)
+          if (structure_list[i]->isOccupied()==false)
           {
-            Major* current_ptr=tribes.at(i)->getKeep(); //get the current keep
-            int coord_x=current_ptr->getX();
-            int coord_y=current_ptr->getY();
-            target_ptr=closestStructure(coord_x, coord_y, &structure_list);
-            if (target_ptr->isOccupied()) //if the target already has a tribe
+            //check for end of production
+            structure_list[i]->endProduction();
+    
+            //increase population
+    
+            int random_number=rand()%100; //generate a random number from 0-99
+            if (random_number<BIRTH_FREQUENCY) //give any one village a 5% chance of increase
             {
-              cout<<"The barbarians cannot spread because all the structures around them are occupied\n";
-              continue;
+              structure_list[i]->addTownsfolk();
+              cout<<"added townsfolk to "<<structure_list[i]->getName()<<"\n";
             }
-          }
-          cout<<"the target for the tribe at "<<tribes.at(i)->getKeep()->getName()<<" is "
-            <<target_ptr->getName()<<"\n";
-
-          if (tribes.at(i)->getKeep()->attack(target_ptr))
-          {
-            cout<<"\033[31mthe barbarians won\033[0m\n";
-            Barbarian* tribe_ptr=new Barbarian(target_ptr); //initialize the new tribe
-            int roamers=tribes.at(i)->getPopulation()*0.1; //the number of barbarians moving to the new keep
-            tribe_ptr->setPopulation(roamers); //set the population of the new tribe
-            tribes.at(i)->setPopulation(tribes.at(i)->getPopulation()-roamers);
-            //set new population of the old tribe
-            cout<<roamers<<" barbarians have moved to "<<target_ptr->getName()<<"\n";
-            tribes.push_back(tribe_ptr);
           }
           else
           {
-            cout<<"\033[32myou fended off the barbarians\033[0m\n";
+            cout<<structure_list[i]->getName()<<" is occupied\n";
           }
         }
-      }
-      //spread=false;
-    }
-    //********************************************check for end of game**************************************************
-    if (wins==5)
-    {
-      cout<<"\033[1;32mCONGRATULATIONS! YOU WON!\033[0m You fended off the barbarian hordes three times, showing that your"
-        <<"kingdom is strong enough to protect itself.\n Thanks for playing\n";
-      cont=false;
-    }
-
-    bool all_occupied=true;
-    for (int i=0; i<structure_list.size(); i+=1)
-    {
-      if (!structure_list.at(i)->isOccupied()) //if there is an unoccupied structure
-      {
-        all_occupied=false;
-        break;
-      }
-    }
-
-    if (all_occupied)
-    {
-      cout<<"\033[1;31m\n\nGAME OVER\n\nYour Kingdom has fallen!\033[0m"
-          <<"All of your villages, castles, and forts are taken by barbarian tribes.Better luck next time!\n";
-      cont=false;
+    
+    
+    
+    //***********************************check for end of journey****************************************
+        for (int i=0; i<highway.size(); i+=1)
+        {
+          highway[i]->endJourney(); //try to end the journey
+        }
+    
+    
+    
+    //***************************************check barbarians********************************************
+        if (Barbarian::tribe_count==0) //if there are not currently barbarians
+        {
+          //cout<<"Checking for barbarian spawn\n";
+          int random_number=rand()%100; //generate random number
+          //cout<<"random number is "<<random_number<<"\n";
+          if  (random_number<3) //||(start_attack))//check if the barbarians spawn
+          {
+            Major* major_ptr=furthestStructure(&structure_list); //get the furthest structure
+            cout<<"\033[1;31mA barbarian tribe is attacking "<<major_ptr->getName()<<"\033[0m\n"; //tell the player about the attack
+            pause(1);
+            Village steppes=Village(); //give the barbarians a beginning structure tile to start from
+            Barbarian* tribe_ptr=new Barbarian(&steppes);
+            tribe_ptr->setPopulation(25);
+            if (tribe_ptr->getKeep()->attack(major_ptr))
+            {
+              cout<<"\033[31mthe barbarians won\033[0m\n";
+              tribe_ptr->setKeep(major_ptr); //set the major as the keep
+              tribes.push_back(tribe_ptr); //initialize the barbarians
+              barbarian_invasion=true;
+            }
+            else
+            {
+              cout<<"\033[32myou fended off the barbarians\033[0m\n";
+              Barbarian::tribe_count-=1; //decrement the tribe counter
+            }
+            start_attack=false;
+          }
+        }
+        else //if there are barbarians
+        {
+          int current_tribe_count=Barbarian::tribe_count;
+          //this variable is so that if any of the tribes spread, the new tribes are also not iterated over
+          for (int i=0; i<current_tribe_count; i+=1)
+          {
+            //increase population
+            tribes.at(i)->increasePopulation(); //try to increase the population of all tribes
+    
+            //pillage
+            tribes.at(i)->pillage(); //try to pillage with all tribes
+    
+            //spread
+            double chance=(rand()%100+1)/100.0; //get a double between 0 and 1
+            if ((chance<Barbarian::spread_chance)&&(tribes.at(i)->getPopulation()>BARBARIAN_THRESHOLD))
+            //if the number is low enough so the barbarians spread
+            //if the barbarian tribe has enough people to spread
+            {
+              cout<<"the barbarians are spreading\n";
+              Major* target_ptr=tribes.at(i)->getTarget(); //get the next target for the tribe
+              if (target_ptr==nullptr)
+              {
+                Major* current_ptr=tribes.at(i)->getKeep(); //get the current keep
+                int coord_x=current_ptr->getX();
+                int coord_y=current_ptr->getY();
+                target_ptr=closestStructure(coord_x, coord_y, &structure_list);
+                if (target_ptr->isOccupied()) //if the target already has a tribe
+                {
+                  cout<<"The barbarians cannot spread because all the structures around them are occupied\n";
+                  continue;
+                }
+              }
+              cout<<"the target for the tribe at "<<tribes.at(i)->getKeep()->getName()<<" is "
+                <<target_ptr->getName()<<"\n";
+    
+              if (tribes.at(i)->getKeep()->attack(target_ptr))
+              {
+                cout<<"\033[31mthe barbarians won\033[0m\n";
+                Barbarian* tribe_ptr=new Barbarian(target_ptr); //initialize the new tribe
+                int roamers=tribes.at(i)->getPopulation()*0.1; //the number of barbarians moving to the new keep
+                tribe_ptr->setPopulation(roamers); //set the population of the new tribe
+                tribes.at(i)->setPopulation(tribes.at(i)->getPopulation()-roamers);
+                //set new population of the old tribe
+                cout<<roamers<<" barbarians have moved to "<<target_ptr->getName()<<"\n";
+                tribes.push_back(tribe_ptr);
+              }
+              else
+              {
+                cout<<"\033[32myou fended off the barbarians\033[0m\n";
+              }
+            }
+          }
+          //spread=false;
+        }
+        //********************************************check for end of game**************************************************
+        if (wins==5)
+        {
+          cout<<"\033[1;32mCONGRATULATIONS! YOU WON!\033[0m You fended off the barbarian hordes three times, showing that your"
+            <<"kingdom is strong enough to protect itself.\n Thanks for playing\n";
+          cont=false;
+        }
+    
+        bool all_occupied=true;
+        for (int i=0; i<structure_list.size(); i+=1)
+        {
+          if (!structure_list.at(i)->isOccupied()) //if there is an unoccupied structure
+          {
+            all_occupied=false;
+            break;
+          }
+        }
+    
+        if (all_occupied)
+        {
+          cout<<"\033[1;31m\n\nGAME OVER\n\nYour Kingdom has fallen!\033[0m"
+              <<"All of your villages, castles, and forts are taken by barbarian tribes.Better luck next time!\n";
+          cont=false;
+        }
     }
   }
   //delete majors

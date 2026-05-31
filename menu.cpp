@@ -190,4 +190,3 @@ int* Menu::getChoice()
   }
   return new int(choice);
 }
-

@@ -5,7 +5,7 @@
 #define DISPLAY_SIZE 20 //the size of the display when displaying the map
 #define BUILD_DISTANCE 7 //a tile must be within this distance to a structure in order to build on it
 #define ROAD_COEFF 3 //how many seconds each unit of distance adds to transportaion time
-#define EXPLORE_LIMIT 5
+#define EXPLORE_LIMIT 7
 #define BIRTH_RATE 0.16
 #define BIRTH_FREQUENCY 10 //number out of 100 that causes an increase of townsfolk
 
@@ -58,8 +58,6 @@
 #define SPREAD_INCREASE_RATE 0.25 //the amount the the chance of spreading increases
 #define BARBARIAN_THRESHOLD 10 //the minimum number of people needed for a barbarian tribe to attack
 
-//calculated constants
-
 //object id numbers for file handling
 #define LAND_ID 1
 #define BARBARIAN_ID 2
@@ -67,4 +65,6 @@
 #define MINOR_ID 4
 #define ROAD_ID 5
 #define CARAVAN_ID 6
+
+
 #endif

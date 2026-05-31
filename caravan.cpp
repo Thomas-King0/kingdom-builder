@@ -25,8 +25,14 @@ Caravan::Caravan(Major* destination_ptr)
   contents_menu.addOption("people");
   contents_menu.addOption("materials");
   contents_menu.display();
-  int action=*contents_menu.getChoice();
-  if (action==1)
+  int* action=contents_menu.getChoice();
+  if (action==nullptr)
+  {
+    std::cout<<"exiting...\n";
+    setDestination(nullptr);
+    return;
+  }
+  else if (*action==1)
   {
     Menu cargo_menu=Menu("Choose what tradesmen to put in this caravan");
     for (int i=0;i<=static_cast<int>(TOWNSFOLK); i+=1)
@@ -36,7 +42,14 @@ Caravan::Caravan(Major* destination_ptr)
     }
     cargo_menu.display();
 
-    int cargo=*cargo_menu.getChoice();
+    int* cargo_ptr=cargo_menu.getChoice();
+    if (cargo_ptr==nullptr)
+    {
+      std::cout<<"exiting...\n";
+      setDestination(nullptr);
+      return;
+    }
+    int cargo=*cargo_ptr;
     if ((cargo<(static_cast<int>(FARMER)+1)||(cargo>(static_cast<int>(TOWNSFOLK)+1))))
     {
       std::cout<<"\033[31m["<<cargo<<"] does not specify a valid trade\033[0m\n";
@@ -49,7 +62,7 @@ Caravan::Caravan(Major* destination_ptr)
       setContents(cargo-1);
     }
   }
-  else if (action==2)
+  else if (*action==2)
   {
     Menu cargo_menu=Menu("Choose material to send");
     for (int i=0; i<static_cast<int>(VACUUM); i+=1)
@@ -59,7 +72,14 @@ Caravan::Caravan(Major* destination_ptr)
     }
     cargo_menu.display();
 
-    int cargo=*cargo_menu.getChoice();
+    int* cargo_ptr=cargo_menu.getChoice();
+    if (cargo_ptr==nullptr)
+    {
+      std::cout<<"exiting...\n";
+      setDestination(nullptr);
+      return;
+    }
+    int cargo=*cargo_ptr;
     if ((cargo<static_cast<int>(PRODUCE)+1)||(cargo>(static_cast<int>(VACUUM))))
     {
       std::cout<<"\033[31m["<<cargo<<"] does not specify a valid type of materials\033[0m\n";
