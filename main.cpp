@@ -1100,13 +1100,95 @@ int main(void)
         }
 
         //coordinates of potential claim
-        int land_x;
-        int land_y;
+        //int land_x;
+        //int land_y;
 
 
         if (major_ptr->getClaimSize()<major_ptr->getLimit())
         //make sure that the major has enough space to make the claim
         {
+          Menu land_menu=Menu("choose land you want to claim");
+          vector<Land*> land_list;
+          //get potential claims
+          
+          //check base
+          int base_x=major_ptr->getX();
+          int base_y=major_ptr->getY();
+          //north
+          Land* claim_ptr=&test_land[pos2index(base_x, base_y+1)];
+          if (major_ptr->canClaim(claim_ptr)) //if the major can claim it
+          {
+            land_menu.addOption(claim_ptr->getData());
+            land_list.push_back(claim_ptr);
+          }
+          //south
+          claim_ptr=&test_land[pos2index(base_x, base_y-1)];
+          if (major_ptr->canClaim(claim_ptr)) //if the major can claim it
+          {
+            land_menu.addOption(claim_ptr->getData());
+            land_list.push_back(claim_ptr);
+          }
+          //east
+          claim_ptr=&test_land[pos2index(base_x+1, base_y)];
+          if (major_ptr->canClaim(claim_ptr)) //if the major can claim it
+          {
+            land_menu.addOption(claim_ptr->getData());
+            land_list.push_back(claim_ptr);
+          }
+          //west
+          claim_ptr=&test_land[pos2index(base_x-1, base_y)];
+          if (major_ptr->canClaim(claim_ptr)) //if the major can claim it
+          {
+            land_menu.addOption(claim_ptr->getData());
+            land_list.push_back(claim_ptr);
+          }
+
+          //check existing claims
+          for (int i=0; i<major_ptr->getClaimSize(); i+=1)
+          {
+            Land* claim_ptr=major_ptr->getClaim(i); //get the current claim
+            int claim_x=claim_ptr->getX();
+            int claim_y=claim_ptr->getY();
+            //north
+            Land* land_ptr=&test_land[pos2index(claim_x, claim_y+1)];
+            if (major_ptr->canClaim(land_ptr)) //if the major can claim it
+            {
+              land_menu.addOption(land_ptr->getData());
+              land_list.push_back(land_ptr);
+            }
+            //south
+            land_ptr=&test_land[pos2index(claim_x, claim_y-1)];
+            if (major_ptr->canClaim(land_ptr)) //if the major can claim it
+            {
+              land_menu.addOption(land_ptr->getData());
+              land_list.push_back(land_ptr);
+            }
+            //east
+            land_ptr=&test_land[pos2index(claim_x+1, claim_y)];
+            if (major_ptr->canClaim(land_ptr)) //if the major can claim it
+            {
+              land_menu.addOption(land_ptr->getData());
+              land_list.push_back(land_ptr);
+            }
+            //west
+            land_ptr=&test_land[pos2index(claim_x-1, claim_y)];
+            if (major_ptr->canClaim(land_ptr)) //if the major can claim it
+            {
+              land_menu.addOption(land_ptr->getData());
+              land_list.push_back(land_ptr);
+            }
+          }
+          
+          land_menu.display();
+          int* choice_ptr=land_menu.getChoice();
+          if (choice_ptr==nullptr)
+          {
+            break;
+          }
+          int choice=*choice_ptr;
+          Land* tile_ptr=land_list.at(choice-1); //get the chosen tile
+          major_ptr->addClaim(tile_ptr); //add the claim
+        /*
           cout<<"Enter coordinates of land you would like to claim: ";
           getCoords(&land_x, &land_y);
           Land* claim_ptr=&test_land[pos2index(land_x, land_y)];
@@ -1114,6 +1196,7 @@ int main(void)
           {
             major_ptr->addClaim(claim_ptr);
           }
+        */
         }
         else
         {
@@ -1337,7 +1420,6 @@ int main(void)
         //write barbarians
         for (int i=0; i<tribes.size(); i+=1)
         {
-          cout<<"writing barbarian\n";
           writer.write(tribes.at(i));
         }
         

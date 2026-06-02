@@ -659,6 +659,10 @@ void Major::load()
   {
     road_ptr->startJourney(); //start the journey
   }
+  else
+  {
+    road_ptr->setCaravan(nullptr);
+  }
 }
 
 //packageCaravan
@@ -666,6 +670,8 @@ bool Major::packageCaravan(Caravan* haul)
 {
   if (haul->getDestination()==nullptr) //make sure that the caravan was successfully set up
   {
+    std::cout<<"failed to package caravan because it had no destination\n";
+    delete haul; //delete the pointer
     return false;
   }
 

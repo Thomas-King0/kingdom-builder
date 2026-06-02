@@ -467,7 +467,6 @@ Road* ObjectWriter::readRoad(std::string* dest1, std::string* dest2, std::string
   //initialize road
   Road* road_ptr=new Road();
   road_ptr->setTransporting(transporting);
-  std::cout<<"setting caravan\n";
   road_ptr->setCaravan(caravan_ptr);
   return road_ptr;
 }
