@@ -49,6 +49,7 @@ void Barbarian::setKeep(Major* keep_ptr)
     std::cout<<"tried setting a keep for a barbarian tribe that already has a keep\n";
     std::cout<<"\tkeep is "<<keep<<"\n";
   }*/
+  //the lines above are commented out because barbarians need to be able to switch keeps for when they are first spawned
 }
 
 //getKeep

@@ -12,3 +12,6 @@ test.cpp
 *.o
 *.txt
 *.sed
+*.exe
+*.bin
+*.copy

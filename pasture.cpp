@@ -32,9 +32,9 @@ void Pasture::endProduction()
       setProducing(false); //stop production
       int inventory=(getKeep())->getMaterials(ANIMALS); //get the number of materials the keep currently has
       int tradesmen=(getKeep())->getPopulation(SHEPHERD); //get the population of miners
-      (getKeep())->setMaterials(ANIMALS, inventory+4*tradesmen);
+      (getKeep())->setMaterials(ANIMALS, inventory+PASTURE_MULTIPLIER*tradesmen);
       std::cout<<"Finished production in a pasture attached to "<<getKeep()->getName()
-        <<", added "<<4*tradesmen<<" animals to inventory\n";
+        <<", added "<<PASTURE_MULTIPLIER*tradesmen<<" animals to inventory\n";
       //for animals, the number of materials produced is equal to 4 times the number of tradesmen
     }
   }

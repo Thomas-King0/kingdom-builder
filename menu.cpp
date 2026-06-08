@@ -15,6 +15,7 @@ Menu::Menu(std::string input_prompt)
   setPrompt(input_prompt);
   std::vector<std::string> options;
   setColor(255);
+  setHelp("there is no help page for this menu");
 }
 
 Menu::Menu(std::string input_prompt, std::vector<std::string> input_options)
@@ -25,6 +26,7 @@ Menu::Menu(std::string input_prompt, std::vector<std::string> input_options)
   {
     addOption(input_options.at(i));
   }
+  setHelp("there is no help page for this menu");
 }
 
 //setPrompt
@@ -96,6 +98,18 @@ std::string Menu::getColor()
   return color;
 }
 
+//setHelp
+void Menu::setHelp(std::string message)
+{
+  help_page=message;
+}
+
+//help
+void Menu::help()
+{
+  std::cout<<"\n\n"<<help_page<<"\n\n";
+}
+
 //display
 void Menu::display()
 {
@@ -124,11 +138,12 @@ void Menu::display()
   std::cout<<"****\033[0m\n\n";
   
   //menu options
-  for (int i=0; i<options.size(); i+=1)
+  int j=0;
+  for (; j<options.size(); j+=1)
   {
-    std::cout<<"  "<<(i+1)<<". "<<getOption(i)<<"\n";
+    std::cout<<"  "<<(j+1)<<". "<<getOption(j)<<"\n";
   }
-  //std::cout<<"  "<<(options.size()+1)<<". exit\n"; //automatically add an exit option
+  //std::cout<<"  "<<(j+1)<<". help\n"; //automatically add a help option
   std::cout<<"\n";
 
   //bottom of menu
@@ -150,17 +165,28 @@ int* Menu::getChoice()
   int choice=0;
   while ((choice<1)||(choice>options.size()))
   {
-    int* num=getInt();
-    if (num!=nullptr)
+    std::string response;
+    getString(&response); //get the response of the player
+    //int* num=getInt();
+    if (response=="help")
     {
-      choice=*num;
+      help(); //display the help page
+      display(); //display the menu again
+      continue;
+    }
+    else if (response=="exit")
+    {
+      return nullptr;
+    }
+    else if (isNum(response))
+    {
+      choice=string2num(response);
     }
 
-    if ((choice<1)||(choice>options.size()))
+    if ((choice<1)||(choice>(options.size()+1)))
     {
       std::cout<<"not a valid choice: pick again\n";
     }
   }
   return new int(choice);
 }
-

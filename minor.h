@@ -24,6 +24,8 @@ private:
 
 public:
   Minor(); //constructor
+  
+  void copy(Minor* minor_ptr); //copy the data of another minor
 
   void setKeep(Major* keep); //set the keep for the minor
   Major* getKeep(); //get the address of the keep

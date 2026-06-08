@@ -20,6 +20,7 @@ private:
 
 public:
 
+  Caravan();
   Caravan(Major* destination_ptr);
 
   bool isMaterials(); //get the type of caravan (sending people or materials)

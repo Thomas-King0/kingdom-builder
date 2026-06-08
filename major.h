@@ -32,13 +32,22 @@ private:
 
   std::vector<int> population; //each element is the population of that particular trade
   int vacancy; //how many more people can be in this village
+
+  std::vector<int> materials; //this vector stores how much of each material the major has
 public:
   Major(); //constructor
+
+  void copy(Major* major_ptr); //copy the contents of another major pointer (this is useful for loading saved data)
 
   //name functions=================================================
   void setName(std::string givenName);
   std::string getName();
   void changeName();
+
+  //inventory functions
+  void setMaterials(Material resource, int num); //set how much of a material a village has
+  int getMaterials(Material resource); //get the how much of a material a village has
+  int getMaterials(int resource); //get how much of a material a village has
 
   //type functions=================================================
   void setType(Major_Structure kind); //set the type of major
@@ -64,6 +73,7 @@ public:
   int getClaimSize(); //get the number of claims
 
   bool canClaim(Land* potential); //return if the major can claim the input land tile
+  void forceClaim(Land* land_ptr); //force a major to claim a land tile (this is used when reading data from a save file)
 
   //limit functions===================================================
   void setLimit(int num); //set the land limit of the structure
@@ -89,9 +99,9 @@ public:
   void startProduction(); //start producing at all minor structures that can
   void endProduction(); //try to end production in finished supports
 
-  virtual void setMaterials(Material resource, int num)=0; //set how much of a material a major has
-  virtual int getMaterials(Material resource)=0; //get the how much of a material a major has
-  virtual int getMaterials(int resource)=0;
+  //virtual void setMaterials(Material resource, int num)=0; //set how much of a material a major has
+  //virtual int getMaterials(Material resource)=0; //get the how much of a material a major has
+  //virtual int getMaterials(int resource)=0;
   //overload the getMaterials function so it can handle either an int or a Material input
 
   //road and caravan functions======================================================
@@ -119,7 +129,7 @@ public:
   int attack(Major* target_ptr); //attack the input land tile
   int getWarriors(); //get the soldiers who are going to fight in a battle
   void setAftermath(int num);
-  virtual double getDefense()=0; //get the defense value for a stsructure
+  virtual double getDefense(); //get the defense value for a stsructure
 
   //miscellaneous functions
   virtual std::string getData(); //return the data contained in the major and all its supports and land as a string

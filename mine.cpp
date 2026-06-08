@@ -32,9 +32,9 @@ void Mine::endProduction()
       setProducing(false); //stop production
       int inventory=(getKeep())->getMaterials(METAL); //get the number of materials the keep currently has
       int tradesmen=(getKeep())->getPopulation(MINER); //get the population of miners
-      (getKeep())->setMaterials(METAL, inventory+tradesmen);
+      (getKeep())->setMaterials(METAL, inventory+MINE_MULTIPLIER*tradesmen);
       std::cout<<"Finished production in a mine attached to "<<getKeep()->getName()
-        <<", added "<<tradesmen<<" metal to inventory\n";
+        <<", added "<<MINE_MULTIPLIER*tradesmen<<" metal to inventory\n";
       //for metal, the number of materials produced is equal to the number of tradesmen
     }
   }

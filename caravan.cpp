@@ -8,6 +8,14 @@
 #include <string>
 
 //constructor
+Caravan::Caravan()
+{
+  setDestination(nullptr);
+  setContents(1);
+  setAmount(0);
+  setIsMaterials(false);
+}
+
 Caravan::Caravan(Major* destination_ptr)
 {
   setDestination(destination_ptr);
@@ -17,8 +25,14 @@ Caravan::Caravan(Major* destination_ptr)
   contents_menu.addOption("people");
   contents_menu.addOption("materials");
   contents_menu.display();
-  int action=*contents_menu.getChoice();
-  if (action==1)
+  int* action=contents_menu.getChoice();
+  if (action==nullptr)
+  {
+    std::cout<<"exiting...\n";
+    setDestination(nullptr);
+    return;
+  }
+  else if (*action==1)
   {
     Menu cargo_menu=Menu("Choose what tradesmen to put in this caravan");
     for (int i=0;i<=static_cast<int>(TOWNSFOLK); i+=1)
@@ -28,7 +42,14 @@ Caravan::Caravan(Major* destination_ptr)
     }
     cargo_menu.display();
 
-    int cargo=*cargo_menu.getChoice();
+    int* cargo_ptr=cargo_menu.getChoice();
+    if (cargo_ptr==nullptr)
+    {
+      std::cout<<"exiting...\n";
+      setDestination(nullptr);
+      return;
+    }
+    int cargo=*cargo_ptr;
     if ((cargo<(static_cast<int>(FARMER)+1)||(cargo>(static_cast<int>(TOWNSFOLK)+1))))
     {
       std::cout<<"\033[31m["<<cargo<<"] does not specify a valid trade\033[0m\n";
@@ -41,7 +62,7 @@ Caravan::Caravan(Major* destination_ptr)
       setContents(cargo-1);
     }
   }
-  else if (action==2)
+  else if (*action==2)
   {
     Menu cargo_menu=Menu("Choose material to send");
     for (int i=0; i<static_cast<int>(VACUUM); i+=1)
@@ -51,7 +72,14 @@ Caravan::Caravan(Major* destination_ptr)
     }
     cargo_menu.display();
 
-    int cargo=*cargo_menu.getChoice();
+    int* cargo_ptr=cargo_menu.getChoice();
+    if (cargo_ptr==nullptr)
+    {
+      std::cout<<"exiting...\n";
+      setDestination(nullptr);
+      return;
+    }
+    int cargo=*cargo_ptr;
     if ((cargo<static_cast<int>(PRODUCE)+1)||(cargo>(static_cast<int>(VACUUM))))
     {
       std::cout<<"\033[31m["<<cargo<<"] does not specify a valid type of materials\033[0m\n";
@@ -123,27 +151,24 @@ int Caravan::getContents()
 void Caravan::setContents(int num)
 {
   /*set max according to if the caravan is carrying people or materials
-  * max for people: 5
-  * max for materials: 4
-  * these are due to the number of elements in the enumeration for both
   */
   int max;
   if (isMaterials()) //ensure that the index referring to the contents is a valid index
   {
-    max=static_cast<int>(VACUUM)-1; //the minnus 1 is because vacuum is not a material the player can actually have
+    max=static_cast<int>(VACUUM)-1; //the minus 1 is because vacuum is not a material the player can actually have
   }
   else
   {
     max=static_cast<int>(TOWNSFOLK); //here no minus 1 is needed because a townsfolk is a valid type of person
   }
 
-  if (num<0) //make sure num is greater than 0
+  if (num<0) //make sure num is not less than 0
   {
     std::cout<<"tried to set an amount that is less than 0 in setContents\n";
   }
   else if (num>max) //make sure it is less than the max
   {
-    std::cout<<"tried to set an amount that is greater than max["<<max<<"] in set contents\n";
+    std::cout<<"tried to set an amount["<<num<<"] that is greater than max["<<max<<"] in Caravan::setContents\n";
   }
   else
   {

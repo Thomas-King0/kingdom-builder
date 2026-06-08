@@ -77,15 +77,15 @@ int power(int base, int exponent); //return the value base^exponent
 std::string int2string(int num); //convert an integer to a string
 //std::string dec2string(double num); //convert a decimal number to a string
 std::string digit2string(int digit); //convert a single digit to a string
+int string2num(std::string str); //convert a string to a number
 std::string material2string(Material resource); //convert material to string
 std::string career2string(Career trade);
 std::string fillString(std::string str, int length); //fill a string to be the required length
 bool isElement(char elmt, std::string str); //check if the input character is in the input string
-void getName(std::string* name); //get the name of a structure
+void getString(std::string* name); //get the name of a structure
 int* getInt(); //more robust way to get an integer
 bool isNum(std::string str); //check if a string is a number
 int char2digit(char str); //convert a string to a digit
-int string2num(std::string str); //convert a string to a number
 void pause(int duration); //pause for the number of seconds indicated
 
 //kingdom_builder functions

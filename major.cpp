@@ -25,6 +25,34 @@ Major::Major() //default constructor
   {
     population.push_back(0);
   }
+  for (int resource=PRODUCE; resource<VACUUM; resource+=1)
+  {
+    materials.push_back(0); //initialize the list of materials, the village starts out with none
+  }
+}
+
+//copy
+void Major::copy(Major* major_ptr)
+{
+  setName(major_ptr->getName());
+  Land* base_ptr=major_ptr->getBase();
+  base_ptr->setKeep(nullptr);
+  setBase(base_ptr);
+  //setOccupants(major_ptr->getOccupants());
+  setType(major_ptr->getType());
+  //for (int i=0; i<major_ptr->getHighwaySize(); i+=1)
+  //{
+    //addRoad(major_ptr->getRoad(i));
+  //}
+
+  for (int career=FARMER; career<=TOWNSFOLK; career+=1)
+  {
+    setPopulation(static_cast<Career>(career), major_ptr->getPopulation(static_cast<Career>(career)));
+  }
+  for (int resource=PRODUCE; resource<VACUUM; resource+=1)
+  {
+    setMaterials(static_cast<Material>(resource), major_ptr->getMaterials(static_cast<Material>(resource)));
+  }
 }
 
 //setName
@@ -50,6 +78,26 @@ void Major::changeName()
   }
   std::getline(std::cin, givenName);
   setName(givenName);
+}
+
+//setMaterials
+void Major::setMaterials(Material resource, int num)
+{ //this function might need significant altering after further consideration of how materials will work
+  if (num>=0)
+  {
+    materials.at(resource)=num;
+  }
+}
+
+//getMaterials
+int Major::getMaterials(Material resource)
+{
+  return materials.at(resource);
+}
+
+int Major::getMaterials(int resource)
+{
+  return materials.at(static_cast<Material>(resource));
 }
 
 //setType
@@ -210,6 +258,12 @@ bool Major::canClaim(Land* potential)
   return false;
 }
 
+void Major::forceClaim(Land* land_ptr)
+{
+  claimed.push_back(land_ptr); //add the claim to the major's list
+  land_ptr->setKeep(this); //set the major as the keep of the tile
+}
+
 //setLimit
 void Major::setLimit(int num) //set the limit of the structure
 {
@@ -265,7 +319,13 @@ void Major::trainTownsfolk()
   trade_menu.addOption({"farmer", "lumberjack", "miner", "shepherd", "stone mason"});
   trade_menu.display();
 
-  int input=*trade_menu.getChoice();
+  int* input_ptr=trade_menu.getChoice();
+  if (input_ptr==nullptr)
+  {
+    std::cout<<"exiting...\n";
+    return;
+  }
+  int input=*input_ptr;
 
   if ((input>0)&&(input<=5))
   {
@@ -304,7 +364,7 @@ void Major::trainTownsfolk()
 void Major::addTownsfolk()
 {
   //double birth_rate=0.16; //birth rate of townsfolk
-  int number=static_cast<int>(getPopulation(TOWNSFOLK)*(BIRTH_RATE)); //get the number of townfolk added
+  int number=static_cast<int>(getPopulation(TOWNSFOLK)*(BIRTH_RATE))+1; //get the number of townfolk added(automatically add at least 1)
   if (number>getVacancy()) //if the population would be more than the structure could handle
   {
     number=getVacancy(); //only add as many people as there is space left
@@ -342,7 +402,12 @@ int Major::getVacancy()
 //addSupport (VIRTUAL)
 void Major::addSupport(Minor* support)
 {
-  if (support->getKeep()!=nullptr) //if the support already has a keep
+  if (support->getKeep()==this)
+  {
+    minor_structures.push_back(support);
+    return;
+  }
+  else if (support->getKeep()!=nullptr) //if the support already has a keep that is not this
   {
     std::cout<<"tried to add a support that already has a keep\n";
     return;
@@ -561,9 +626,7 @@ void Major::load()
   std::cout<<"connected structures\n{\n"<<getSisterList()<<"}\nwhere are you sending this caravan: ";
   std::string name;
 
-  ::getName(&name);
-  *:: is the global scope resolution operator. it is needed because otherwise the compiler thinks
-   *this is Major::getName(), not getName(Major*) from helpful.h
+  getString(&name);
    */
 
   //Check that the destination is valid
@@ -596,6 +659,10 @@ void Major::load()
   {
     road_ptr->startJourney(); //start the journey
   }
+  else
+  {
+    road_ptr->setCaravan(nullptr);
+  }
 }
 
 //packageCaravan
@@ -603,6 +670,8 @@ bool Major::packageCaravan(Caravan* haul)
 {
   if (haul->getDestination()==nullptr) //make sure that the caravan was successfully set up
   {
+    std::cout<<"failed to package caravan because it had no destination\n";
+    delete haul; //delete the pointer
     return false;
   }
 
@@ -777,6 +846,12 @@ int Major::getWarriors()
   {
     return getOccupants()->getPopulation(); //return the barbarians occupying the structure
   }
+}
+
+//getDefense
+double Major::getDefense()
+{
+  return 0;
 }
 
 //setAftermath

@@ -5,7 +5,7 @@
 #define DISPLAY_SIZE 20 //the size of the display when displaying the map
 #define BUILD_DISTANCE 7 //a tile must be within this distance to a structure in order to build on it
 #define ROAD_COEFF 3 //how many seconds each unit of distance adds to transportaion time
-#define EXPLORE_LIMIT 5
+#define EXPLORE_LIMIT 7
 #define BIRTH_RATE 0.16
 #define BIRTH_FREQUENCY 10 //number out of 100 that causes an increase of townsfolk
 
@@ -23,10 +23,19 @@
 
 //minor structure constants
 #define MINE_PRODUCTION 60 //How long it takes a mine to produce
+#define MINE_MULTIPLIER 1 //how much metal each miner produces
+
 #define QUARRY_PRODUCTION 45 //how long it takes for a quarry to produce
+#define QUARRY_MULTIPLIER 2 //how much stone each stone mason produces
+
 #define SAWMILL_PRODUCTION 30 //how many seconds it takes a sawmill to produce
+#define SAWMILL_MULTIPLIER 3 //how much wood each lumberjack produces
+
 #define PASTURE_PRODUCTION 15 //how long it takes a pasture to produce
+#define PASTURE_MULTIPLIER 4 //how much livestock each shepherd produces
+
 #define GARDEN_PRODUCTION 5 //how long it takes a garden to produce
+#define GARDEN_MULTIPLIER 5 //how much produce each farmer produces
 
 //village constants
 #define VILLAGE_CAPACITY 50 //this is the total capacity of the village
@@ -39,7 +48,7 @@
 #define CASTLE_DEFENSE 0.04
 
 //fort constants
-#define FORT_CAPACITY 50
+#define FORT_CAPACITY 80
 #define FORT_LIMIT 0
 #define FORT_DEFENSE 0.02
 
@@ -49,6 +58,13 @@
 #define SPREAD_INCREASE_RATE 0.25 //the amount the the chance of spreading increases
 #define BARBARIAN_THRESHOLD 10 //the minimum number of people needed for a barbarian tribe to attack
 
-//calculated constants
+//object id numbers for file handling
+#define LAND_ID 1
+#define BARBARIAN_ID 2
+#define MAJOR_ID 3
+#define MINOR_ID 4
+#define ROAD_ID 5
+#define CARAVAN_ID 6
+
 
 #endif
